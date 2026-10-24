@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mobile Cloud Remote Controller & Device Telemetry</title>
-  <!-- Chart.js for High Performance Interactive Statistics Graphs -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Mobile Live Screen Remote Controller</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -35,18 +33,18 @@
       gap: 10px;
     }
     .brand-icon {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       background: #10b981;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 20px;
       color: #022c22;
       font-weight: bold;
     }
-    .brand h1 { font-size: 16px; font-weight: 700; color: #10b981; }
+    .brand h1 { font-size: 17px; font-weight: 700; color: #10b981; }
     .brand p { font-size: 11px; color: #94a3b8; }
     .badge {
       padding: 4px 10px;
@@ -92,227 +90,212 @@
       background: #1e293b;
       color: #e2e8f0;
       border: 1px solid #334155;
-      padding: 10px 14px;
+      padding: 8px 14px;
       font-size: 12px;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      gap: 6px;
     }
-    .btn-action:hover { background: #334155; border-color: #10b981; color: #34d399; }
-    .btn-nav {
-      flex: 1;
-      padding: 12px 8px;
-      background: #1e293b;
-      color: #cbd5e1;
-      border: 1px solid #334155;
-      font-weight: 700;
-      font-size: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-nav:hover { background: #334155; color: white; }
+    .btn-action:hover { background: #334155; border-color: #475569; }
     .btn-mode {
       flex: 1;
-      padding: 9px 6px;
-      font-size: 11px;
-      font-weight: 700;
+      padding: 8px 12px;
+      font-size: 12px;
       background: #1e293b;
       color: #94a3b8;
       border: 1px solid #334155;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s;
+      text-align: center;
     }
-    .btn-mode:hover { background: #334155; color: #fff; }
     .btn-mode.active {
       background: rgba(16, 185, 129, 0.2);
       color: #34d399;
-      border: 1px solid #10b981;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
-    }
-    /* Navigation Bar Tabs */
-    .tab-bar {
-      display: flex;
-      gap: 6px;
-      background: #0b1120;
-      border-bottom: 1px solid #1e293b;
-      padding: 8px 24px;
-      overflow-x: auto;
-    }
-    .tab-btn {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      background: transparent;
-      color: #94a3b8;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .tab-btn:hover { color: #f1f5f9; background: #1e293b; }
-    .tab-btn.active {
-      background: #1e293b;
-      color: #34d399;
       border-color: #10b981;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
-    }
-
-    main {
-      flex: 1;
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-      width: 100%;
+      font-weight: 700;
     }
     .card {
       background: #0f172a;
       border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 16px;
     }
     .input-text {
       width: 100%;
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 10px 14px;
       color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
       font-size: 14px;
-      margin-bottom: 14px;
       outline: none;
+      transition: border 0.2s;
     }
     .input-text:focus { border-color: #10b981; }
-
-    /* Screen container */
+    main {
+      flex: 1;
+      padding: 16px 20px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .screen-layout {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
     .screen-container {
-      width: 340px;
-      background: #000;
-      border-radius: 28px;
-      padding: 10px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
-      border: 3px solid #10b981;
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex-shrink: 0;
+      width: 100%;
+      max-width: 440px;
     }
-    .viewport {
-      position: relative;
-      width: 320px;
-      height: 640px;
-      background: #020617;
+    .viewport-box {
+      width: 100%;
+      aspect-ratio: 9 / 18.5;
+      max-height: 78vh;
+      background: #000;
       border-radius: 20px;
+      border: 3px solid #1e293b;
       overflow: hidden;
+      position: relative;
       cursor: crosshair;
+      user-select: none;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .viewport img {
+    .viewport-box img, .viewport-box video, .viewport-box canvas {
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
-      user-select: none;
-      -webkit-user-drag: none;
     }
     .nav-bar {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
       width: 100%;
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
       margin-top: 10px;
+      gap: 6px;
     }
-    .side-panel {
+    .btn-nav {
+      flex: 1;
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 10px 0;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-align: center;
+    }
+    .btn-nav:hover { background: #334155; border-color: #10b981; color: #34d399; }
+    .btn-nav:active { background: #10b981; color: #022c22; }
+    .side-controls {
       flex: 1;
       min-width: 320px;
-      max-width: 500px;
+      max-width: 440px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
-
-    /* Metric Grid & Rows */
     .metric-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0;
+      padding: 7px 0;
       border-bottom: 1px solid #1e293b;
       font-size: 13px;
     }
-    .metric-row:last-child { border-bottom: none; }
-    .metric-label { color: #94a3b8; display: flex; align-items: center; gap: 6px; }
-    .metric-value { font-weight: 600; color: #f8fafc; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-
-    /* Grid for Telemetry Cards */
-    .telemetry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 16px;
+    .metric-label { color: #94a3b8; }
+    .metric-value { font-weight: 600; color: #e2e8f0; }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .chart-container {
-      position: relative;
-      height: 220px;
+    .modal-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 580px;
       width: 100%;
-      margin-top: 10px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .progress-bar-bg {
-      background: #1e293b;
-      border-radius: 99px;
-      height: 8px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: #10b981;
-      border-radius: 99px;
-      transition: width 0.5s ease;
+    pre {
+      background: #020617;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 11px;
+      overflow-x: auto;
+      color: #38bdf8;
+      border: 1px solid #1e293b;
+      margin: 8px 0;
+      user-select: all;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+  <!-- HEADER -->
   <header>
     <div class="brand">
-      <div class="brand-icon">⚡</div>
+      <div class="brand-icon">📱</div>
       <div>
-        <h1>Mobile Remote Host & Device Telemetry</h1>
-        <p id="hdr-phone-user">No IP or Port Forwarding • Direct Cloud Stream</p>
+        <h1>Mobile Live Screen Remote</h1>
+        <p>Direct Screen Streaming & Full Input Control</p>
       </div>
     </div>
-    <div style="display:flex; gap:10px; align-items:center;">
-      <button class="btn btn-action" style="padding: 6px 12px; font-size: 12px;" onclick="openSupabaseModal()">⚙️ Supabase Settings</button>
-      <span id="session-badge" class="badge" style="display:none;"><span class="pulse-dot"></span> LIVE CLOUD ACTIVE</span>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <span id="active-host-badge" class="badge" style="display:none; background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.3);">
+        📱 <span id="active-host-id">--</span>
+      </span>
+      <span id="session-badge" class="badge" style="display:none;">
+        <span class="pulse-dot"></span> <span id="session-status-text">LIVE SCREEN ACTIVE</span>
+      </span>
+      <span id="battery-badge" class="badge" style="display:none; background:rgba(251,191,36,0.15); color:#fbbf24; border-color:rgba(251,191,36,0.3);">
+        🔋 <span id="header-battery">--%</span>
+      </span>
+      <button class="btn btn-action" onclick="openSupabaseModal()">⚙️ Supabase Settings</button>
       <button id="logout-btn" class="btn btn-danger" style="display:none;" onclick="logout()">Disconnect</button>
     </div>
   </header>
 
-  <!-- TAB NAVIGATION (VISIBLE ONCE LOGGED IN) -->
-  <nav id="app-tabs" class="tab-bar" style="display:none;">
-    <button class="tab-btn active" onclick="switchTab('screen-tab')">📱 Live Remote Screen</button>
-    <button class="tab-btn" onclick="switchTab('analytics-tab')">📊 Analytics & Graphs</button>
-    <button class="tab-btn" onclick="switchTab('telemetry-tab')">📋 All Device Telemetry</button>
-    <button class="tab-btn" onclick="switchTab('actions-tab')">🛠️ Remote Actions & Tools</button>
-  </nav>
-
   <main>
-    <!-- LOGIN VIEW (ONLY USERNAME & PASSWORD) -->
+    <!-- LOGIN VIEW -->
     <div id="login-card" class="card" style="max-width:440px; margin: 40px auto;">
-      <h2 style="font-size: 18px; margin-bottom: 8px; color: #10b981;">Login to Your Mobile</h2>
+      <h2 style="font-size: 18px; margin-bottom: 8px; color: #10b981;">Connect to Your Mobile Device</h2>
       <p style="font-size: 13px; color: #94a3b8; margin-bottom: 18px; line-height: 18px;">
-        কোনো আইপি বা পোর্ট ফরোয়ার্ডিং লাগবে না। সরাসরি আপনার মোবাইলের ইউজারনেম ও পাসওয়ার্ড দিন:
+        কোনো পোর্ট ফরোয়ার্ডিং বা আইপি দরকার নেই। সরাসরি আপনার মোবাইলের ইউজারনেম ও পাসওয়ার্ড দিন:
       </p>
 
-      <!-- Auto-Discovered Devices Box -->
+      <!-- Auto-Discovered Online Devices -->
       <div id="auto-devices-box" style="margin-bottom: 16px; display: none;">
         <label style="font-size: 12px; color: #34d399; font-weight: 700; display:flex; align-items:center; gap:6px; margin-bottom: 8px;">
           <span class="pulse-dot"></span> সক্রিয় মোবাইল ডিভাইস (Online Devices Found):
@@ -329,108 +312,84 @@
       <div id="auth-err" style="display:none; color:#f87171; font-size:12px; margin-bottom:12px; background: rgba(239,68,68,0.1); padding: 8px; border-radius: 6px;"></div>
 
       <button class="btn btn-primary" style="width:100%; padding:12px; font-size:14px; justify-content:center;" onclick="connectWithCloud()">
-        Login & Connect to Mobile
+        Login & View Live Screen
       </button>
     </div>
 
-    <!-- TAB 1: LIVE REMOTE SCREEN & SPEED MODES -->
-    <div id="screen-tab" class="tab-content" style="display:none;">
-      <div style="display:flex; gap:24px; flex-wrap:wrap; justify-content:center; align-items:flex-start;">
-        <!-- Phone Viewport -->
+    <!-- MAIN LIVE SCREEN VIEW -->
+    <div id="screen-view" style="display:none;">
+      <div class="screen-layout">
+        
+        <!-- Live Phone Screen Viewport -->
         <div class="screen-container">
-          <!-- WebRTC Live Status Indicator -->
-          <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:10px; padding:0 6px;">
-            <div style="display:flex; align-items:center; gap:6px;">
+          <!-- Top Bar on Viewport -->
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:8px; padding:0 4px;">
+            <div style="display:flex; align-items:center; gap:8px;">
               <span id="webrtc-badge" class="badge" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:11px; border:1px solid #10b981;">
                 ⚡ WebRTC P2P (~40ms)
               </span>
               <span id="webrtc-ping" style="font-size:11px; color:#94a3b8; font-weight:700;">-- ms</span>
             </div>
-            <button class="btn-action" style="padding:4px 8px; font-size:11px; height:26px;" onclick="reconnectWebRtc()" title="Restart WebRTC P2P tunnel">
-              🔄 WebRTC
-            </button>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="refreshScreenNow()" title="Force instant screenshot capture">
+                🔄 Refresh Screen
+              </button>
+              <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="reconnectWebRtc()" title="Restart WebRTC P2P tunnel">
+                🔄 WebRTC
+              </button>
+              <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="toggleFullscreen()" title="Fullscreen">
+                🔲
+              </button>
+            </div>
           </div>
 
-          <div class="viewport" id="viewport">
+          <!-- Video / Image Stream Container -->
+          <div class="viewport-box" id="viewport">
             <video id="remoteVideo" autoplay playsinline muted style="display:none; width:100%; height:100%; object-fit:contain;"></video>
             <video id="mobile-screen-video" autoplay playsinline muted style="display:none; width:100%; height:100%; object-fit:contain;"></video>
             <canvas id="mobile-screen-canvas" style="display:none; width:100%; height:100%; object-fit:contain;"></canvas>
-            <img id="mobile-screen-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='360' height='720' viewBox='0 0 360 720'><rect width='360' height='720' fill='%230f172a'/><text x='180' y='330' fill='%2310b981' font-size='22' font-family='sans-serif' font-weight='bold' text-anchor='middle'>⚡ Mobile Remote Host</text><text x='180' y='370' fill='%2394a3b8' font-size='14' font-family='sans-serif' text-anchor='middle'>Waiting for Screen Stream...</text><text x='180' y='400' fill='%2338bdf8' font-size='12' font-family='sans-serif' text-anchor='middle'>Host Connected</text></svg>" alt="Waiting for mobile screen stream...">
+            <img id="mobile-screen-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='360' height='720' viewBox='0 0 360 720'><rect width='360' height='720' fill='%230f172a'/><text x='180' y='330' fill='%2310b981' font-size='22' font-family='sans-serif' font-weight='bold' text-anchor='middle'>⚡ Mobile Remote Host</text><text x='180' y='370' fill='%2394a3b8' font-size='14' font-family='sans-serif' text-anchor='middle'>Connecting to live display...</text></svg>" alt="Live mobile screen">
           </div>
+
+          <!-- Navigation Buttons Bar -->
           <div class="nav-bar">
-            <button class="btn-nav" onclick="sendCloudNav('BACK')">◀ BACK</button>
-            <button class="btn-nav" onclick="sendCloudNav('HOME')">● HOME</button>
-            <button class="btn-nav" onclick="sendCloudNav('RECENTS')">■ RECENTS</button>
+            <button class="btn-nav" onclick="sendCloudNav('BACK')" title="Back">◀ BACK</button>
+            <button class="btn-nav" onclick="sendCloudNav('HOME')" title="Home">● HOME</button>
+            <button class="btn-nav" onclick="sendCloudNav('RECENTS')" title="Recent Apps">■ RECENTS</button>
+            <button class="btn-nav" onclick="sendCloudNav('NOTIFICATIONS')" title="Notifications">🔔 NOTIF</button>
             <button class="btn-nav" onclick="wakeDeviceScreen()" style="color:#38bdf8; font-weight:bold;" title="Turn screen on remotely">💡 WAKE</button>
+            <button class="btn-nav" onclick="refreshScreenNow()" style="color:#34d399;" title="Fetch latest screen immediately">🔄 SYNC</button>
           </div>
         </div>
 
-        <!-- Controls Side Panel -->
-        <div class="side-panel">
-          <!-- 6-POINT ULTRA LOW LATENCY STREAMING ENGINE CARD -->
-          <div class="card" style="border: 1px solid rgba(56, 189, 248, 0.4); background: #0c1527;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-              <h3 style="font-size:14px; color:#38bdf8; display:flex; align-items:center; gap:6px;">
-                ⚡ 6-Step Low-Latency Stream Engine
-              </h3>
-              <button class="btn btn-primary" style="padding:4px 10px; font-size:11px;" onclick="requestImmediateKeyframe()">
-                ⚡ Sync I-Frame
-              </button>
-            </div>
-
-            <!-- 1. Keyframe Interval (GOP) -->
+        <!-- Side Remote Controls -->
+        <div class="side-controls">
+          
+          <!-- Live Stream Status Card -->
+          <div class="card">
+            <h3 style="font-size:15px; margin-bottom:10px; color:#10b981; display:flex; justify-content:space-between; align-items:center;">
+              <span>Live Screen Connection</span>
+              <span id="m-status-pill" class="badge">ONLINE</span>
+            </h3>
             <div class="metric-row">
-              <span class="metric-label">১. Keyframe Interval (GOP):</span>
-              <strong id="m-gop-val" style="color:#34d399;">1.0s (Fast Keyframe • No Backlog)</strong>
+              <span class="metric-label">Screen State:</span>
+              <span id="m-screen-state" class="metric-value" style="color:#34d399;">Active (Interactive)</span>
             </div>
-
-            <!-- 2. Hardware Encoder & Profile -->
             <div class="metric-row">
-              <span class="metric-label">২. Hardware Encoder Profile:</span>
-              <strong id="m-profile-val" style="color:#38bdf8;">H.264 Baseline (Zero B-Frames)</strong>
+              <span class="metric-label">Battery Level:</span>
+              <span id="m-battery" class="metric-value">--</span>
             </div>
-
-            <!-- 3. Jitter Buffer & Playout Delay -->
             <div class="metric-row">
-              <span class="metric-label">৩. Jitter Buffer & Playout Delay:</span>
-              <strong id="m-jitter-val" style="color:#34d399;">0.0 ms (Direct srcObject • Zero Delay)</strong>
+              <span class="metric-label">Last Frame Update:</span>
+              <span id="m-frame-time" class="metric-value" style="color:#38bdf8;">Live</span>
             </div>
-
-            <!-- 4. Resolution, Bitrate & FPS -->
-            <div class="metric-row">
-              <span class="metric-label">৪. Resolution / Bitrate / FPS:</span>
-              <strong id="m-res-val" style="color:#fbbf24;">720p @ 30 FPS (2000 kbps CBR)</strong>
-            </div>
-
-            <!-- 5. Network P2P vs TURN Relay -->
-            <div class="metric-row">
-              <span class="metric-label">৫. Network Connection Type:</span>
-              <span id="m-p2p-type" class="badge" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:11px;">
-                🟢 Direct P2P (srflx/host)
-              </span>
-            </div>
-
-            <!-- 6. Frame Dropping / Queue Flush -->
             <div class="metric-row" style="border-bottom:none;">
-              <span class="metric-label">৬. Queue Flush Policy:</span>
-              <strong id="m-queue-val" style="color:#38bdf8;">Queue Flush Active (0 queued backlog)</strong>
-            </div>
-
-            <!-- Quick Preset Buttons -->
-            <div style="display:flex; gap:6px; margin-top:10px;">
-              <button class="btn btn-action" style="flex:1; font-size:11px; padding:6px 8px;" onclick="updateOptimizerSettings(720, 1280, 2000, 30, 1)">
-                🎯 720p (2 Mbps)
-              </button>
-              <button class="btn btn-action" style="flex:1; font-size:11px; padding:6px 8px;" onclick="updateOptimizerSettings(540, 960, 1500, 30, 1)">
-                ⚡ 540p (1.5 Mbps)
-              </button>
-              <button class="btn btn-action" style="flex:1; font-size:11px; padding:6px 8px;" onclick="requestImmediateKeyframe()">
-                🔄 Force I-Frame
-              </button>
+              <span class="metric-label">Last Heartbeat:</span>
+              <span id="m-heartbeat" class="metric-value">Just now</span>
             </div>
           </div>
 
-          <!-- 3-MODE STREAMING LATENCY CARD -->
+          <!-- Speed & Latency Mode Card -->
           <div class="card" style="border: 1px solid rgba(16, 185, 129, 0.4);">
             <h3 style="font-size:14px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
               <span style="color:#10b981;">⚡ Speed & Latency Mode</span>
@@ -446,375 +405,137 @@
             </div>
           </div>
 
-          <!-- Quick Summary Card -->
-          <div class="card">
-            <h3 style="font-size:15px; margin-bottom:10px; color:#10b981;">Quick Mobile Status</h3>
-            <div class="metric-row">
-              <span class="metric-label">Device Status:</span>
-              <strong id="m-status" style="color:#34d399;">ONLINE</strong>
-            </div>
-            <div class="metric-row">
-              <span class="metric-label">Battery Level:</span>
-              <span id="m-battery" class="metric-value">--</span>
-            </div>
-            <div class="metric-row">
-              <span class="metric-label">Charging State:</span>
-              <span id="m-charging-type" class="metric-value">--</span>
-            </div>
-            <div class="metric-row">
-              <span class="metric-label">Active Network:</span>
-              <span id="m-network" class="metric-value">--</span>
-            </div>
-            <div class="metric-row">
-              <span class="metric-label">Foreground App:</span>
-              <span id="m-fg-app" class="metric-value" style="color:#38bdf8;">--</span>
-            </div>
-            <div class="metric-row">
-              <span class="metric-label">Last Heartbeat:</span>
-              <span id="m-heartbeat" class="metric-value">Just now</span>
-            </div>
-            <div style="margin-top:10px; display:flex; gap:6px;">
-              <button class="btn btn-outline" style="flex:1; padding:6px 10px; font-size:11px; justify-content:center;" onclick="sendCloudCommand({ type: 'sync_now' })">🔄 Ping / Refresh Heartbeat</button>
-            </div>
-          </div>
-
           <!-- Remote Keyboard Input -->
           <div class="card">
-            <h3 style="font-size:15px; margin-bottom:10px;">Remote Keyboard</h3>
+            <h3 style="font-size:14px; margin-bottom:10px;">Remote Keyboard</h3>
+            <p style="font-size:11px; color:#94a3b8; margin-bottom:8px;">
+              ফোনের সিলেক্টেড টেক্সট ফিল্ডে সরাসরি টাইপ করে পাঠান:
+            </p>
             <div style="display:flex; gap:8px;">
-              <input type="text" id="type-text-input" class="input-text" style="margin-bottom:0;" placeholder="Type text to send to phone...">
+              <input type="text" id="type-text-input" class="input-text" style="margin-bottom:0;" placeholder="Type text here..." onkeydown="if(event.key==='Enter') sendCloudText()">
               <button class="btn btn-primary" onclick="sendCloudText()">Send</button>
             </div>
           </div>
 
-          <!-- Quick Actions -->
+          <!-- Quick Controls -->
           <div class="card">
-            <h3 style="font-size:14px; margin-bottom:10px;">Quick Controls</h3>
+            <h3 style="font-size:14px; margin-bottom:10px;">Quick Actions</h3>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <button class="btn-action" onclick="refreshScreenNow()">🔄 Refresh Screen</button>
+              <button class="btn-action" onclick="requestImmediateKeyframe()">⚡ Sync I-Frame</button>
               <button class="btn-action" onclick="sendCloudCommand({type:'ring_device'})">🔔 Ring Device</button>
-              <button class="btn-action" onclick="sendCloudCommand({type:'sync_now'})">🔄 Refresh Telemetry</button>
+              <button class="btn-action" onclick="wakeDeviceScreen()">💡 Wake Display</button>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- TAB 2: ANALYTICS & INTERACTIVE GRAPHS -->
-    <div id="analytics-tab" class="tab-content" style="display:none;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2 style="font-size:18px; color:#10b981;">📊 Device Statistics & Usage Analytics</h2>
-        <button class="btn-action" onclick="sendCloudCommand({type:'sync_now'})">🔄 Refresh Graphs</button>
-      </div>
-
-      <div class="telemetry-grid">
-        <!-- 1. Battery Drain & Trend Chart -->
-        <div class="card" style="grid-column: span 2;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 style="font-size:15px; color:#34d399;">⚡ Battery Usage & Drain Trend</h3>
-            <span id="chart-battery-badge" class="badge">--%</span>
-          </div>
-          <p style="font-size:12px; color:#94a3b8; margin-top:2px;">
-            সময়ভিত্তিক ব্যাটারি ক্ষয় ও চার্জিং ইতিহাস
-          </p>
-          <div class="chart-container">
-            <canvas id="batteryChart"></canvas>
-          </div>
-          <div style="display:flex; justify-content:space-between; font-size:12px; color:#94a3b8; margin-top:8px;">
-            <span>Drain Rate: <strong id="stat-drain-rate" style="color:white;">--</strong></span>
-            <span>Temperature: <strong id="stat-temp" style="color:#fbbf24;">--</strong></span>
-            <span>Est. Remaining: <strong id="stat-est-time" style="color:#34d399;">--</strong></span>
-          </div>
         </div>
 
-        <!-- 2. App-wise Screen Time Bar Chart -->
-        <div class="card" style="grid-column: span 2;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 style="font-size:15px; color:#38bdf8;">📱 App-wise Screen Time & Daily Usage</h3>
-            <span id="chart-screentime-badge" class="badge" style="background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.3);">Total: 4h 52m</span>
-          </div>
-          <p style="font-size:12px; color:#94a3b8; margin-top:2px;">
-            কোন অ্যাপ কত মিনিট ব্যবহার করা হয়েছে তার পরিসংখ্যান
-          </p>
-          <div class="chart-container">
-            <canvas id="appUsageChart"></canvas>
-          </div>
-        </div>
-
-        <!-- 3. RAM Memory Gauge -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:6px; color:#a78bfa;">🧠 RAM Memory Distribution</h3>
-          <div class="chart-container" style="height:170px;">
-            <canvas id="ramChart"></canvas>
-          </div>
-          <div class="metric-row" style="margin-top:10px;">
-            <span>Used RAM:</span>
-            <strong id="gauge-ram-used" style="color:#a78bfa;">--</strong>
-          </div>
-          <div class="metric-row">
-            <span>Free RAM:</span>
-            <strong id="gauge-ram-free" style="color:#34d399;">--</strong>
-          </div>
-        </div>
-
-        <!-- 4. Storage Distribution Gauge -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:6px; color:#f59e0b;">💾 Internal Storage Distribution</h3>
-          <div class="chart-container" style="height:170px;">
-            <canvas id="storageChart"></canvas>
-          </div>
-          <div class="metric-row" style="margin-top:10px;">
-            <span>Used Storage:</span>
-            <strong id="gauge-storage-used" style="color:#f59e0b;">--</strong>
-          </div>
-          <div class="metric-row">
-            <span>Free Storage:</span>
-            <strong id="gauge-storage-free" style="color:#34d399;">--</strong>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: ALL DEVICE TELEMETRY & AUDIT -->
-    <div id="telemetry-tab" class="tab-content" style="display:none;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2 style="font-size:18px; color:#10b981;">📋 Complete Device Telemetry & Health Audit</h2>
-        <button class="btn-action" onclick="sendCloudCommand({type:'sync_now'})">🔄 Refresh Telemetry</button>
-      </div>
-
-      <div class="telemetry-grid">
-        <!-- 1. Device Lifecycle & Status -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#10b981;">🔄 Status & Lifecycle</h3>
-          <div class="metric-row"><span class="metric-label">Online/Offline Status:</span><span id="t-status" class="metric-value" style="color:#34d399;">ONLINE</span></div>
-          <div class="metric-row"><span class="metric-label">Screen State:</span><span id="t-screen-state" class="metric-value">Screen On</span></div>
-          <div class="metric-row"><span class="metric-label">Device Lock:</span><span id="t-lock-state" class="metric-value">Secured (PIN)</span></div>
-          <div class="metric-row"><span class="metric-label">Device Uptime:</span><span id="t-uptime" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Last Boot Time:</span><span id="t-last-boot" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Unlock Count:</span><span id="t-unlock-count" class="metric-value">-- times</span></div>
-          <div class="metric-row"><span class="metric-label">Daily Screen Time:</span><span id="t-screen-time" class="metric-value">4h 52m</span></div>
-          <div class="metric-row"><span class="metric-label">Idle Time:</span><span id="t-idle-time" class="metric-value">Active</span></div>
-        </div>
-
-        <!-- 2. Hardware & System Specs -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#38bdf8;">⚙️ Hardware & System</h3>
-          <div class="metric-row"><span class="metric-label">Device Model:</span><span id="t-model" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Android Version:</span><span id="t-android" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Security Patch:</span><span id="t-patch" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">CPU Cores & Arch:</span><span id="t-cpu" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Screen Resolution:</span><span id="t-resolution" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Refresh Rate:</span><span id="t-refresh-rate" class="metric-value">120 Hz</span></div>
-          <div class="metric-row"><span class="metric-label">Display Density:</span><span id="t-density" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Brightness:</span><span id="t-brightness" class="metric-value">68%</span></div>
-          <div class="metric-row"><span class="metric-label">Dark Mode:</span><span id="t-dark-mode" class="metric-value">Enabled</span></div>
-          <div class="metric-row"><span class="metric-label">System Language:</span><span id="t-language" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Time Zone:</span><span id="t-timezone" class="metric-value">--</span></div>
-        </div>
-
-        <!-- 3. Battery Health & Power -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#fbbf24;">⚡ Battery Health & Power</h3>
-          <div class="metric-row"><span class="metric-label">Battery Level:</span><span id="t-battery-pct" class="metric-value" style="color:#34d399;">--%</span></div>
-          <div class="metric-row"><span class="metric-label">Charging State:</span><span id="t-charging" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Charging Type:</span><span id="t-plug-type" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Battery Temperature:</span><span id="t-temp" class="metric-value">--°C</span></div>
-          <div class="metric-row"><span class="metric-label">Battery Health:</span><span id="t-health" class="metric-value">Good</span></div>
-          <div class="metric-row"><span class="metric-label">Battery Voltage:</span><span id="t-voltage" class="metric-value">-- mV</span></div>
-          <div class="metric-row"><span class="metric-label">Power-Saving Mode:</span><span id="t-power-save" class="metric-value">Off</span></div>
-          <div class="metric-row"><span class="metric-label">Drain Rate:</span><span id="t-drain-rate" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Estimated Remaining:</span><span id="t-remaining" class="metric-value">--</span></div>
-        </div>
-
-        <!-- 4. Network & SIM Details -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#a78bfa;">🌐 Network & SIM Telemetry</h3>
-          <div class="metric-row"><span class="metric-label">Active Network:</span><span id="t-net-type" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Network Gen:</span><span id="t-net-gen" class="metric-value">Wi-Fi 6 / 5G</span></div>
-          <div class="metric-row"><span class="metric-label">Wi-Fi SSID:</span><span id="t-wifi-ssid" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Signal Strength:</span><span id="t-wifi-signal" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Link Speed:</span><span id="t-link-speed" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">SIM Operator:</span><span id="t-sim-op" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">SIM State:</span><span id="t-sim-state" class="metric-value">SIM Ready</span></div>
-          <div class="metric-row"><span class="metric-label">SIM Slots:</span><span id="t-sim-count" class="metric-value">Dual SIM (2)</span></div>
-          <div class="metric-row"><span class="metric-label">IP Address (Local):</span><span id="t-ip" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">VPN Status:</span><span id="t-vpn" class="metric-value">Inactive</span></div>
-          <div class="metric-row"><span class="metric-label">Data Saver:</span><span id="t-data-saver" class="metric-value">Off</span></div>
-          <div class="metric-row"><span class="metric-label">Today's Data Usage:</span><span id="t-data-usage" class="metric-value">--</span></div>
-        </div>
-
-        <!-- 5. Location & Sensor Telemetry -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#f43f5e;">📍 Location & GPS Telemetry</h3>
-          <div class="metric-row"><span class="metric-label">GPS Status:</span><span id="t-gps" class="metric-value">High Accuracy Active</span></div>
-          <div class="metric-row"><span class="metric-label">Coordinates:</span><span id="t-coords" class="metric-value">23.8103° N, 90.4125° E</span></div>
-          <div class="metric-row"><span class="metric-label">Accuracy:</span><span id="t-loc-accuracy" class="metric-value">± 8 meters</span></div>
-          <div class="metric-row"><span class="metric-label">Movement:</span><span id="t-movement" class="metric-value">Stationary (Desk)</span></div>
-          <div style="margin-top:14px;">
-            <a id="t-maps-link" href="https://maps.google.com/?q=23.8103,90.4125" target="_blank" class="btn btn-action" style="width:100%; text-decoration:none; justify-content:center;">
-              🗺️ Find My Device on Google Maps
-            </a>
-          </div>
-        </div>
-
-        <!-- 6. Security & Device Integrity -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#10b981;">🛡️ Security & Integrity</h3>
-          <div class="metric-row"><span class="metric-label">Play Protect:</span><span id="t-play-protect" class="metric-value" style="color:#34d399;">Verified Safe</span></div>
-          <div class="metric-row"><span class="metric-label">Biometric Enrollment:</span><span id="t-biometrics" class="metric-value">Active</span></div>
-          <div class="metric-row"><span class="metric-label">Developer Options:</span><span id="t-dev-options" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">USB Debugging:</span><span id="t-usb-debug" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Root Detection:</span><span id="t-root" class="metric-value" style="color:#34d399;">Not Rooted (Official)</span></div>
-          <div class="metric-row"><span class="metric-label">Device Integrity:</span><span id="t-integrity" class="metric-value" style="color:#34d399;">Certified Strong</span></div>
-        </div>
-
-        <!-- 7. Telephony & Notifications -->
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#eab308;">📞 Telephony & Notifications</h3>
-          <div class="metric-row"><span class="metric-label">Call State:</span><span id="t-call-state" class="metric-value">Idle</span></div>
-          <div class="metric-row"><span class="metric-label">Airplane Mode:</span><span id="t-airplane" class="metric-value">Off</span></div>
-          <div class="metric-row"><span class="metric-label">VoLTE HD Voice:</span><span id="t-volte" class="metric-value">Active</span></div>
-          <div class="metric-row"><span class="metric-label">Notification Count:</span><span id="t-notif-count" class="metric-value">--</span></div>
-          <div class="metric-row"><span class="metric-label">Last Notification:</span><span id="t-last-notif" class="metric-value" style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">--</span></div>
-        </div>
-
-        <!-- 8. Installed Apps Explorer -->
-        <div class="card" style="grid-column: span 2;">
-          <h3 style="font-size:15px; margin-bottom:12px; color:#38bdf8;">📦 Installed Applications (<span id="t-installed-count">--</span>)</h3>
-          <div id="installed-apps-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; max-height:240px; overflow-y:auto;">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 4: REMOTE ACTIONS & TOOLS -->
-    <div id="actions-tab" class="tab-content" style="display:none;">
-      <h2 style="font-size:18px; color:#10b981; margin-bottom:16px;">🛠️ Remote Actions & Device Management</h2>
-      <div class="telemetry-grid">
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:8px; color:#10b981;">🔔 Ring / Find Device</h3>
-          <p style="font-size:12px; color:#94a3b8; margin-bottom:14px; line-height:16px;">
-            মোবাইল হারিয়ে গেলে বা খুঁজে না পেলে রিমোটলি সর্বোচ্চ আওয়াজে রিংটোন বাজান এবং ভাইব্রেট করান।
-          </p>
-          <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="sendCloudCommand({type:'ring_device'})">
-            🔔 Ring Device Loudly
-          </button>
-        </div>
-
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:8px; color:#f43f5e;">🚨 Emergency Alert</h3>
-          <p style="font-size:12px; color:#94a3b8; margin-bottom:14px; line-height:16px;">
-            মোবাইলে জরুরি সাইরেন ও ভাইব্রেশন অ্যালার্ট পাঠান যাতে কোনো গুরুত্বপূর্ণ বিষয়ে নজর কাড়া যায়।
-          </p>
-          <button class="btn btn-danger" style="width:100%; justify-content:center;" onclick="sendCloudCommand({type:'emergency_alert'})">
-            🚨 Send Emergency Alert
-          </button>
-        </div>
-
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:8px; color:#38bdf8;">🔄 Force Telemetry Sync</h3>
-          <p style="font-size:12px; color:#94a3b8; margin-bottom:14px; line-height:16px;">
-            ফোনের বর্তমান হার্ডওয়্যার, ব্যাটারি, নেটওয়ার্ক ও অ্যাপ স্ট্যাটিস্টিক্স সাথে সাথে আপডেট করুন।
-          </p>
-          <button class="btn-action" style="width:100%; justify-content:center;" onclick="sendCloudCommand({type:'sync_now'})">
-            🔄 Sync Now
-          </button>
-        </div>
-
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:8px; color:#eab308;">📥 Export Diagnostics Report</h3>
-          <p style="font-size:12px; color:#94a3b8; margin-bottom:14px; line-height:16px;">
-            মোবাইলের সম্পূর্ণ হার্ডওয়্যার ও স্বাস্থ্য রিপোর্ট JSON ফাইল হিসেবে আপনার পিসিতে ডাউনলোড করুন।
-          </p>
-          <button class="btn-action" style="width:100%; justify-content:center;" onclick="exportTelemetryReport()">
-            📥 Download Audit Report (.json)
-          </button>
-        </div>
       </div>
     </div>
   </main>
 
-  <!-- SUPABASE CONFIGURATION MODAL -->
-  <div id="supabase-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
-    <div style="background:#0f172a; border:1px solid #334155; border-radius:12px; width:90%; max-width:560px; padding:24px; box-shadow:0 10px 25px rgba(0,0,0,0.5); max-height:90vh; overflow-y:auto;">
+  <!-- SUPABASE SETTINGS MODAL -->
+  <div id="supabase-modal" class="modal-overlay">
+    <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
         <h3 style="font-size:17px; color:#10b981; display:flex; align-items:center; gap:8px;">
-          ⚡ Supabase Cloud Settings
+          <span>⚙️ Supabase Cloud Configuration</span>
         </h3>
-        <button onclick="closeSupabaseModal()" style="background:transparent; border:none; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</button>
+        <button class="btn-action" style="padding:4px 8px;" onclick="closeSupabaseModal()">✕</button>
       </div>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px; line-height:18px;">
-        This remote controller uses <strong>Supabase</strong> (PostgREST + Realtime) for direct zero-latency telemetry, screen streaming, and WebRTC signaling.
+
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px; line-height:17px;">
+        এই রিমোট কন্ট্রোলারটি <strong>Supabase (PostgREST + Realtime)</strong> ব্যবহার করে স্ক্রিন স্ট্রিম করে।
       </p>
 
-      <label style="font-size:12px; color:#cbd5e1; font-weight:600; display:block; margin-bottom:4px;">Supabase Project URL:</label>
-      <input type="text" id="cfg-supabase-url" class="input-text" style="width:100%; margin-bottom:12px;" placeholder="https://xyz.supabase.co">
+      <label style="font-size:12px; color:#a7f3d0; font-weight:700; display:block; margin-bottom:4px;">Supabase Project URL:</label>
+      <input type="text" id="modal-supabase-url" class="input-text" placeholder="https://xyz.supabase.co">
 
-      <label style="font-size:12px; color:#cbd5e1; font-weight:600; display:block; margin-bottom:4px;">Supabase Anon / Public API Key:</label>
-      <input type="text" id="cfg-supabase-key" class="input-text" style="width:100%; margin-bottom:12px;" placeholder="eyJhbGciOiJIUz...">
+      <label style="font-size:12px; color:#a7f3d0; font-weight:700; display:block; margin-bottom:4px;">Supabase Anon Key (Public API Key):</label>
+      <input type="password" id="modal-supabase-key" class="input-text" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
 
-      <div id="supabase-test-result" style="display:none; font-size:12px; padding:8px 12px; border-radius:6px; margin-bottom:12px;"></div>
+      <div id="modal-test-result" style="display:none; font-size:12px; padding:10px; border-radius:8px; margin-bottom:14px;"></div>
 
-      <div style="display:flex; gap:8px; margin-bottom:16px;">
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
         <button class="btn btn-action" style="flex:1; justify-content:center;" onclick="testSupabaseConnection()">
           🔌 Test Connection
         </button>
         <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="saveSupabaseSettings()">
-          💾 Save & Reload
+          💾 Save & Connect
         </button>
       </div>
 
       <div style="border-top:1px solid #1e293b; padding-top:14px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="font-size:12px; font-weight:700; color:#38bdf8;">Supabase SQL Table Schema:</span>
-          <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="copySupabaseSchema()">📋 Copy SQL</button>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:12px; color:#38bdf8;">Required Supabase SQL Table:</strong>
+          <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="copySqlSchema()">📋 Copy SQL</button>
         </div>
-        <pre id="supabase-sql-code" style="background:#090d16; border:1px solid #1e293b; border-radius:6px; padding:10px; font-size:11px; color:#a7f3d0; overflow-x:auto; max-height:140px;"></pre>
+        <p style="font-size:11px; color:#64748b; margin-top:4px;">
+          Supabase SQL Editor-এ এই কোড রান করুন:
+        </p>
+        <pre id="sql-schema-box">CREATE TABLE IF NOT EXISTS public.hosts (
+    id TEXT PRIMARY KEY,
+    password TEXT NOT NULL DEFAULT 'HostAdmin@2026',
+    status TEXT NOT NULL DEFAULT 'ONLINE',
+    is_screen_on BOOLEAN DEFAULT true,
+    battery_pct INT DEFAULT 100,
+    is_charging BOOLEAN DEFAULT false,
+    streaming_mode TEXT DEFAULT 'LOW_LATENCY',
+    last_heartbeat BIGINT NOT NULL,
+    latest_frame TEXT,
+    frame_timestamp BIGINT,
+    telemetry JSONB DEFAULT '{}'::jsonb,
+    webrtc_session JSONB,
+    webrtc_ice_host JSONB,
+    webrtc_ice_web JSONB,
+    commands JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+ALTER TABLE public.hosts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow public anon full access for mobile remote host" ON public.hosts;
+CREATE POLICY "Allow public anon full access for mobile remote host"
+    ON public.hosts FOR ALL
+    TO anon, authenticated
+    USING (true) WITH CHECK (true);</pre>
       </div>
     </div>
   </div>
 
-  <!-- SUPABASE JS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // --- SUPABASE CLIENT & CREDENTIAL PERSISTENCE ---
+    const STORAGE_KEY_URL = "mobile_remote_supabase_url";
+    const STORAGE_KEY_KEY = "mobile_remote_supabase_anon_key";
+
     const DEFAULT_SUPABASE_URL = "https://fdfdckjvxqomrcrqejcr.supabase.co";
-    const DEFAULT_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkZmRja2p2eHFvbXJjcnFlamNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4Mjk5MDAsImV4cCI6MjAyNTQwNTkwMH0.g1K2t7YgGjF-example-key";
-
-    const SUPABASE_SQL_SCHEMA = `CREATE TABLE IF NOT EXISTS public.hosts (
-    id TEXT PRIMARY KEY,
-    password TEXT NOT NULL DEFAULT 'HostAdmin@2026',
-    status TEXT NOT NULL DEFAULT 'ONLINE',
-    is_screen_on BOOLEAN NOT NULL DEFAULT true,
-    battery_pct INT DEFAULT 85,
-    is_charging BOOLEAN DEFAULT false,
-    streaming_mode TEXT DEFAULT 'LOW_LATENCY',
-    last_heartbeat BIGINT DEFAULT 0,
-    latest_frame TEXT,
-    frame_timestamp BIGINT DEFAULT 0,
-    telemetry JSONB DEFAULT '{}'::jsonb,
-    webrtc_session JSONB DEFAULT '{}'::jsonb,
-    webrtc_ice_host JSONB DEFAULT '[]'::jsonb,
-    webrtc_ice_web JSONB DEFAULT '[]'::jsonb,
-    commands JSONB DEFAULT '[]'::jsonb,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-ALTER TABLE public.hosts ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Allow public anon full access for mobile remote host"
-ON public.hosts FOR ALL TO anon USING (true) WITH CHECK (true);`;
+    const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkZmRja2p2eHFvbXJjcnFlamNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4Mjk5MDAsImV4cCI6MjAyNTQwNTkwMH0.g1K2t7YgGjF-example-key";
 
     function getSupabaseUrl() {
-      return (localStorage.getItem("supabase_url") || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, "");
+      return localStorage.getItem(STORAGE_KEY_URL) || DEFAULT_SUPABASE_URL;
     }
 
     function getSupabaseAnonKey() {
-      return (localStorage.getItem("supabase_anon_key") || DEFAULT_SUPABASE_ANON_KEY).trim();
+      return localStorage.getItem(STORAGE_KEY_KEY) || DEFAULT_SUPABASE_KEY;
     }
 
-    // Direct resilient PostgREST helper
-    async function supabaseFetch(path, method = "GET", body = null) {
+    let supabaseClient = null;
+    let realtimeChannel = null;
+
+    function initSupabase() {
+      const url = getSupabaseUrl();
+      const key = getSupabaseAnonKey();
+      try {
+        if (window.supabase && typeof window.supabase.createClient === "function") {
+          supabaseClient = window.supabase.createClient(url, key, {
+            auth: { persistSession: false, autoRefreshToken: false }
+          });
+        }
+      } catch (e) {
+        console.warn("Supabase init notice:", e);
+      }
+    }
+
+    async function supabaseFetch(endpoint, method = "GET", body = null) {
       const url = getSupabaseUrl();
       const key = getSupabaseAnonKey();
       const headers = {
@@ -822,639 +543,197 @@ ON public.hosts FOR ALL TO anon USING (true) WITH CHECK (true);`;
         "Authorization": `Bearer ${key}`,
         "Content-Type": "application/json"
       };
-      if (method === "POST") {
-        headers["Prefer"] = "resolution=merge-duplicates,return=representation";
-      }
       const options = { method, headers };
       if (body) {
         options.body = JSON.stringify(body);
       }
-      const res = await fetch(`${url}/rest/v1/${path}`, options);
-      if (!res.ok) {
-        const errText = await res.text().catch(() => "");
-        throw new Error(`HTTP ${res.status}: ${errText || res.statusText}`);
+      const resp = await fetch(`${url}/rest/v1/${endpoint}`, options);
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(`HTTP ${resp.status}: ${text}`);
       }
-      const text = await res.text();
-      return text ? JSON.parse(text) : null;
+      if (method === "GET") {
+        return await resp.json();
+      }
+      return null;
     }
 
-    let supabaseClient = null;
-    try {
-      if (window.supabase && typeof window.supabase.createClient === "function") {
-        supabaseClient = window.supabase.createClient(getSupabaseUrl(), getSupabaseAnonKey());
-      }
-    } catch (e) {
-      console.warn("Supabase SDK client creation notice:", e);
+    // Modal Helpers
+    function openSupabaseModal() {
+      document.getElementById("modal-supabase-url").value = getSupabaseUrl();
+      document.getElementById("modal-supabase-key").value = getSupabaseAnonKey();
+      document.getElementById("modal-test-result").style.display = "none";
+      document.getElementById("supabase-modal").style.display = "flex";
     }
+    window.openSupabaseModal = openSupabaseModal;
 
-    // Supabase Settings Modal Handlers
-    window.openSupabaseModal = function() {
-      document.getElementById("cfg-supabase-url").value = getSupabaseUrl();
-      document.getElementById("cfg-supabase-key").value = getSupabaseAnonKey();
-      document.getElementById("supabase-sql-code").textContent = SUPABASE_SQL_SCHEMA;
-      const res = document.getElementById("supabase-test-result");
-      if (res) res.style.display = "none";
-      const modal = document.getElementById("supabase-modal");
-      if (modal) modal.style.display = "flex";
-    };
+    function closeSupabaseModal() {
+      document.getElementById("supabase-modal").style.display = "none";
+    }
+    window.closeSupabaseModal = closeSupabaseModal;
 
-    window.closeSupabaseModal = function() {
-      const modal = document.getElementById("supabase-modal");
-      if (modal) modal.style.display = "none";
-    };
+    async function testSupabaseConnection() {
+      const resultDiv = document.getElementById("modal-test-result");
+      resultDiv.style.display = "block";
+      resultDiv.style.background = "rgba(56,189,248,0.15)";
+      resultDiv.style.color = "#38bdf8";
+      resultDiv.textContent = "Connecting to Supabase...";
 
-    window.copySupabaseSchema = function() {
-      navigator.clipboard.writeText(SUPABASE_SQL_SCHEMA).then(() => {
-        alert("Supabase SQL schema copied to clipboard! Paste it in your Supabase SQL Editor and click 'Run'.");
-      }).catch(() => {
-        alert("Please copy manually from the box.");
-      });
-    };
-
-    window.testSupabaseConnection = async function() {
-      const resEl = document.getElementById("supabase-test-result");
-      resEl.style.display = "block";
-      resEl.textContent = "Connecting to Supabase...";
-      resEl.style.background = "rgba(56, 189, 248, 0.15)";
-      resEl.style.color = "#38bdf8";
+      const url = document.getElementById("modal-supabase-url").value.trim();
+      const key = document.getElementById("modal-supabase-key").value.trim();
 
       try {
-        const testUrl = document.getElementById("cfg-supabase-url").value.trim().replace(/\/$/, "");
-        const testKey = document.getElementById("cfg-supabase-key").value.trim();
-
-        const resp = await fetch(`${testUrl}/rest/v1/hosts?select=id&limit=1`, {
-          headers: {
-            "apikey": testKey,
-            "Authorization": `Bearer ${testKey}`
-          }
+        const resp = await fetch(`${url}/rest/v1/hosts?select=id&limit=1`, {
+          headers: { "apikey": key, "Authorization": `Bearer ${key}` }
         });
-
         if (resp.ok) {
-          resEl.textContent = "✅ Supabase connection successful! 'hosts' table is accessible.";
-          resEl.style.background = "rgba(16, 185, 129, 0.2)";
-          resEl.style.color = "#34d399";
+          resultDiv.style.background = "rgba(16,185,129,0.2)";
+          resultDiv.style.color = "#34d399";
+          resultDiv.textContent = "✅ Successfully connected to Supabase! Table 'hosts' is accessible.";
         } else {
-          const txt = await resp.text();
-          resEl.textContent = `⚠️ Connection error: HTTP ${resp.status} - ${txt}`;
-          resEl.style.background = "rgba(239, 68, 68, 0.2)";
-          resEl.style.color = "#f87171";
+          const body = await resp.text();
+          resultDiv.style.background = "rgba(239,68,68,0.2)";
+          resultDiv.style.color = "#f87171";
+          resultDiv.textContent = `❌ HTTP ${resp.status}: ${body}`;
         }
-      } catch (err) {
-        resEl.textContent = `❌ Network error: ${err.message}`;
-        resEl.style.background = "rgba(239, 68, 68, 0.2)";
-        resEl.style.color = "#f87171";
+      } catch (e) {
+        resultDiv.style.background = "rgba(239,68,68,0.2)";
+        resultDiv.style.color = "#f87171";
+        resultDiv.textContent = `❌ Connection Error: ${e.message}`;
       }
-    };
+    }
+    window.testSupabaseConnection = testSupabaseConnection;
 
-    window.saveSupabaseSettings = function() {
-      const url = document.getElementById("cfg-supabase-url").value.trim();
-      const key = document.getElementById("cfg-supabase-key").value.trim();
+    function saveSupabaseSettings() {
+      const url = document.getElementById("modal-supabase-url").value.trim();
+      const key = document.getElementById("modal-supabase-key").value.trim();
       if (!url || !key) {
-        alert("Please provide both Supabase URL and Anon Key.");
+        alert("Please enter both Supabase Project URL and Anon Key.");
         return;
       }
-      localStorage.setItem("supabase_url", url);
-      localStorage.setItem("supabase_anon_key", key);
-      alert("Supabase settings saved! Reloading...");
-      location.reload();
-    };
+      localStorage.setItem(STORAGE_KEY_URL, url);
+      localStorage.setItem(STORAGE_KEY_KEY, key);
+      initSupabase();
+      closeSupabaseModal();
+      discoverOnlineDevices();
+      alert("✅ Supabase credentials saved successfully!");
+    }
+    window.saveSupabaseSettings = saveSupabaseSettings;
 
+    function copySqlSchema() {
+      const sql = document.getElementById("sql-schema-box").textContent;
+      navigator.clipboard.writeText(sql).then(() => {
+        alert("✅ SQL Schema copied to clipboard! Paste it into Supabase SQL Editor and run it.");
+      });
+    }
+    window.copySqlSchema = copySqlSchema;
+
+    // --- APPLICATION STATE ---
     let currentUsername = "";
+    let screenPollInterval = null;
+    let signalingPollInterval = null;
+    let webrtcPingInterval = null;
     let activeMode = "LOW_LATENCY";
     let lastRenderedFrameTime = 0;
-    let latestTelemetryCache = null;
-    let lastKnownHeartbeat = 0;
-    let lastKnownScreenOn = true;
-    let lastKnownStatus = "ONLINE";
 
-    let screenPollInterval = null;
-    let realtimeChannel = null;
-
-    // WebRTC P2P Ultra-Fast State
+    // WebRTC P2P variables
     let rtcPeerConnection = null;
     let rtcDataChannel = null;
+    let activeSessionId = null;
+    let processedHostCandidateSet = new Set();
     let isWebRtcActive = false;
-    let webrtcPingInterval = null;
-    let currentSessionId = "";
-    let pendingHostCandidates = [];
-    let processedHostCandidateSdpSet = new Set();
-    let myLocalIceWebCandidates = [];
-    let signalingPollInterval = null;
 
-    async function startWebRtcConnection(username) {
-      if (!username) return;
-      currentSessionId = "sess_" + Date.now();
-      pendingHostCandidates = [];
-      processedHostCandidateSdpSet.clear();
-      myLocalIceWebCandidates = [];
-
-      console.log("Initiating WebRTC Ultra-Fast P2P via Supabase for:", username, "Session:", currentSessionId);
-      const badge = document.getElementById("webrtc-badge");
-      if (badge) {
-        badge.textContent = "⏳ WebRTC Connecting...";
-        badge.style.background = "rgba(245, 158, 11, 0.2)";
-        badge.style.color = "#fbbf24";
-        badge.style.border = "1px solid #f59e0b";
-      }
-
+    // Auto-discover online devices
+    async function discoverOnlineDevices() {
+      const box = document.getElementById("auto-devices-box");
+      const list = document.getElementById("auto-devices-list");
       try {
-        if (rtcPeerConnection) {
-          try { rtcPeerConnection.close(); } catch (_) {}
-        }
-        if (signalingPollInterval) clearInterval(signalingPollInterval);
-        if (webrtcPingInterval) clearInterval(webrtcPingInterval);
-        if (window.webrtcStatsInterval) clearInterval(window.webrtcStatsInterval);
-
-        // Rule 5: Direct P2P via Google STUN
-        const config = {
-          iceServers: [
-            { urls: "stun:stun.l.google.com:19302" },
-            { urls: "stun:stun1.l.google.com:19302" },
-            { urls: "stun:stun2.l.google.com:19302" },
-            { urls: "stun:stun3.l.google.com:19302" },
-            { urls: "stun:stun4.l.google.com:19302" }
-          ],
-          iceTransportPolicy: "all",
-          bundlePolicy: "max-bundle"
-        };
-
-        rtcPeerConnection = new RTCPeerConnection(config);
-
-        function attachVideoCatchUp(videoEl) {
-          if (!videoEl || videoEl._catchUpAttached) return;
-          videoEl._catchUpAttached = true;
-          videoEl.addEventListener('timeupdate', () => {
-            if (videoEl.buffered && videoEl.buffered.length > 0) {
-              const liveTime = videoEl.buffered.end(videoEl.buffered.length - 1);
-              if ((liveTime - videoEl.currentTime) > 0.3) {
-                videoEl.currentTime = liveTime;
-              }
+        const rows = await supabaseFetch("hosts?select=id,status,battery_pct,is_charging,last_heartbeat&order=last_heartbeat.desc&limit=5");
+        if (rows && rows.length > 0) {
+          list.innerHTML = "";
+          let onlineFound = false;
+          const now = Date.now();
+          rows.forEach(r => {
+            const diffSec = Math.floor((now - (r.last_heartbeat || 0)) / 1000);
+            if (diffSec <= 180) {
+              onlineFound = true;
+              const btn = document.createElement("button");
+              btn.className = "btn-action";
+              btn.style.width = "100%";
+              btn.style.justifyContent = "space-between";
+              btn.innerHTML = `
+                <span style="font-weight:700; color:#34d399;">📱 ${r.id}</span>
+                <span style="font-size:11px; color:#94a3b8;">${r.battery_pct || 100}% ⚡ • ${diffSec}s ago</span>
+              `;
+              btn.onclick = () => {
+                document.getElementById("username-input").value = r.id;
+                connectWithCloud();
+              };
+              list.appendChild(btn);
             }
           });
+          if (onlineFound) {
+            box.style.display = "block";
+          }
         }
-
-        function enforceZeroLatencyBaselineProfile(sdp) {
-          if (!sdp) return sdp;
-          let modified = sdp.replace(/profile-level-id=[0-9a-fA-F]{6}/gi, 'profile-level-id=42e00a');
-          if (modified.includes('H264') && !modified.includes('profile-level-id=42e00a')) {
-            modified = modified.replace(/a=rtpmap:(\d+)\s+H264\/90000/g, 'a=rtpmap:$1 H264/90000\r\na=fmtp:$1 profile-level-id=42e00a;packetization-mode=1');
-          }
-          return modified;
-        }
-
-        rtcPeerConnection.ontrack = (event) => {
-          console.log("WebRTC video track received!");
-          const video = document.getElementById("remoteVideo") || document.getElementById("mobile-screen-video");
-          const secVideo = document.getElementById("mobile-screen-video");
-          const img = document.getElementById("mobile-screen-img");
-          const canvas = document.getElementById("mobile-screen-canvas");
-          if (video && event.streams[0]) {
-            video.srcObject = event.streams[0];
-            video.style.display = "block";
-            if (secVideo && secVideo !== video) secVideo.srcObject = event.streams[0];
-            if (img) img.style.display = "none";
-            if (canvas) canvas.style.display = "none";
-            video.play().catch(() => {});
-            attachVideoCatchUp(video);
-          }
-          if (event.receiver) {
-            if ('playoutDelayHint' in event.receiver) event.receiver.playoutDelayHint = 0.0;
-            if ('jitterBufferTarget' in event.receiver) event.receiver.jitterBufferTarget = 0.0;
-            if (typeof event.receiver.SetJitterBufferMinimumDelay === 'function') {
-              try { event.receiver.SetJitterBufferMinimumDelay(0.0); } catch (_) {}
-            }
-          }
-        };
-
-        rtcDataChannel = rtcPeerConnection.createDataChannel("remote_control", {
-          ordered: false,
-          maxRetransmits: 0
-        });
-        setupWebRtcDataChannel(rtcDataChannel);
-
-        window.webrtcStatsInterval = setInterval(async () => {
-          if (!rtcPeerConnection) return;
-          try {
-            const stats = await rtcPeerConnection.getStats();
-            let activePair = null;
-            const candidateMap = {};
-
-            stats.forEach(report => {
-              if (report.type === 'candidate-pair' && (report.state === 'succeeded' || report.nominated)) {
-                activePair = report;
-              } else if (report.type === 'local-candidate' || report.type === 'remote-candidate') {
-                candidateMap[report.id] = report;
-              }
-            });
-
-            if (activePair) {
-              const localCand = candidateMap[activePair.localCandidateId];
-              const remoteCand = candidateMap[activePair.remoteCandidateId];
-              const localType = localCand?.candidateType || 'srflx';
-              const remoteType = remoteCand?.candidateType || 'srflx';
-              const isDirectP2P = (localType !== 'relay' && remoteType !== 'relay');
-              const rtt = activePair.currentRoundTripTime ? Math.round(activePair.currentRoundTripTime * 1000) : null;
-
-              const badge = document.getElementById("m-p2p-type");
-              if (badge) {
-                if (isDirectP2P) {
-                  badge.textContent = `🟢 Direct P2P (${localType} • Zero Latency • STUN)`;
-                  badge.style.background = "rgba(16, 185, 129, 0.2)";
-                  badge.style.color = "#34d399";
-                  badge.style.border = "1px solid #10b981";
-                } else {
-                  badge.textContent = `⚠️ Relay (${localType})`;
-                  badge.style.background = "rgba(239, 68, 68, 0.2)";
-                  badge.style.color = "#f87171";
-                  badge.style.border = "1px solid #ef4444";
-                }
-              }
-
-              if (rtt !== null) {
-                const pingEl = document.getElementById("webrtc-ping");
-                if (pingEl) pingEl.textContent = rtt + " ms";
-              }
-            }
-          } catch (_) {}
-        }, 1200);
-
-        rtcPeerConnection.onicecandidate = async (event) => {
-          if (event.candidate) {
-            try {
-              myLocalIceWebCandidates.push({
-                sessionId: currentSessionId,
-                sdp: event.candidate.candidate,
-                sdpMid: event.candidate.sdpMid,
-                sdpMLineIndex: event.candidate.sdpMLineIndex,
-                timestamp: Date.now()
-              });
-
-              await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}`, "PATCH", {
-                webrtc_ice_web: myLocalIceWebCandidates
-              });
-            } catch (err) {
-              console.warn("Error posting ICE candidate to Supabase:", err);
-            }
-          }
-        };
-
-        rtcPeerConnection.oniceconnectionstatechange = () => {
-          console.log("WebRTC ICE Connection State:", rtcPeerConnection.iceConnectionState);
-          const b = document.getElementById("webrtc-badge");
-          if (!b) return;
-          if (rtcPeerConnection.iceConnectionState === "connected" || rtcPeerConnection.iceConnectionState === "completed") {
-            b.textContent = "⚡ WebRTC P2P (Active • ~35ms • Real-time)";
-            b.style.background = "rgba(16, 185, 129, 0.2)";
-            b.style.color = "#34d399";
-            b.style.border = "1px solid #10b981";
-            window.requestImmediateKeyframe();
-          } else if (rtcPeerConnection.iceConnectionState === "checking") {
-            b.textContent = "⏳ WebRTC P2P Handshake...";
-            b.style.background = "rgba(245, 158, 11, 0.2)";
-            b.style.color = "#fbbf24";
-            b.style.border = "1px solid #f59e0b";
-          } else if (rtcPeerConnection.iceConnectionState === "failed" || rtcPeerConnection.iceConnectionState === "disconnected") {
-            b.textContent = "🔄 Cloud Relay Active";
-            b.style.background = "rgba(56, 189, 248, 0.15)";
-            b.style.color = "#38bdf8";
-            b.style.border = "1px solid #38bdf8";
-          }
-        };
-
-        // Create SDP Offer
-        const offer = await rtcPeerConnection.createOffer();
-        const zeroLatencyOffer = new RTCSessionDescription({
-          type: offer.type,
-          sdp: enforceZeroLatencyBaselineProfile(offer.sdp)
-        });
-        await rtcPeerConnection.setLocalDescription(zeroLatencyOffer);
-
-        // Upload Offer to Supabase hosts table
-        await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}`, "PATCH", {
-          webrtc_session: {
-            sessionId: currentSessionId,
-            offer: {
-              type: zeroLatencyOffer.type,
-              sdp: zeroLatencyOffer.sdp
-            },
-            status: "OFFERED",
-            offerTime: Date.now()
-          },
-          webrtc_ice_web: []
-        });
-
-        // Fast signaling polling loop for mobile host Answer & ICE candidates
-        signalingPollInterval = setInterval(async () => {
-          if (!rtcPeerConnection) return;
-          try {
-            const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}&select=webrtc_session,webrtc_ice_host`);
-            if (rows && rows.length > 0) {
-              const hostRow = rows[0];
-
-              // 1. Check Answer
-              const sess = hostRow.webrtc_session;
-              if (sess && sess.status === "ANSWERED" && sess.answer && sess.sessionId === currentSessionId && rtcPeerConnection.signalingState === "have-local-offer") {
-                console.log("Received WebRTC Answer from Supabase!");
-                const answer = new RTCSessionDescription({
-                  type: sess.answer.type,
-                  sdp: enforceZeroLatencyBaselineProfile(sess.answer.sdp)
-                });
-                await rtcPeerConnection.setRemoteDescription(answer);
-                for (const cand of pendingHostCandidates) {
-                  rtcPeerConnection.addIceCandidate(cand).catch(() => {});
-                }
-                pendingHostCandidates = [];
-              }
-
-              // 2. Check Host ICE candidates
-              const hostIceList = hostRow.webrtc_ice_host;
-              if (Array.isArray(hostIceList)) {
-                for (const c of hostIceList) {
-                  if (c && c.sdp && !processedHostCandidateSdpSet.has(c.sdp)) {
-                    processedHostCandidateSdpSet.add(c.sdp);
-                    const candidate = new RTCIceCandidate({
-                      candidate: c.sdp,
-                      sdpMid: c.sdpMid,
-                      sdpMLineIndex: c.sdpMLineIndex
-                    });
-                    if (rtcPeerConnection.remoteDescription) {
-                      rtcPeerConnection.addIceCandidate(candidate).catch(() => {});
-                    } else {
-                      pendingHostCandidates.push(candidate);
-                    }
-                  }
-                }
-              }
-            }
-          } catch (_) {}
-        }, 800);
-
-      } catch (e) {
-        console.error("WebRTC initialization error:", e);
-      }
+      } catch (_) {}
     }
 
-    function setupWebRtcDataChannel(dc) {
-      dc.binaryType = "arraybuffer";
-
-      dc.onopen = () => {
-        console.log("WebRTC DataChannel OPEN! Ultra-low latency streaming engaged.");
-        isWebRtcActive = true;
-        const b = document.getElementById("webrtc-badge");
-        if (b) {
-          b.textContent = "⚡ WebRTC P2P (Active • ~35ms • 30 FPS)";
-          b.style.background = "rgba(16, 185, 129, 0.2)";
-          b.style.color = "#34d399";
-          b.style.border = "1px solid #10b981";
-        }
-
-        window.requestImmediateKeyframe();
-        try { dc.send(JSON.stringify({ type: "get_stats" })); } catch (_) {}
-
-        webrtcPingInterval = setInterval(() => {
-          if (dc.readyState === "open") {
-            dc.send(JSON.stringify({ type: "ping", time: Date.now() }));
-          }
-        }, 1500);
-      };
-
-      dc.onclose = () => {
-        isWebRtcActive = false;
-        if (webrtcPingInterval) clearInterval(webrtcPingInterval);
-      };
-
-      dc.onmessage = (event) => {
-        if (event.data instanceof ArrayBuffer) {
-          const uint8 = new Uint8Array(event.data);
-          const packetType = uint8[0];
-
-          // Packet Type 0x01: Low-Latency Frame
-          if (packetType === 1 && uint8.length > 1) {
-            const imageBytes = uint8.subarray(1);
-            const blob = new Blob([imageBytes], { type: "image/jpeg" });
-            const url = URL.createObjectURL(blob);
-            const img = document.getElementById("mobile-screen-img");
-            if (img) {
-              const oldUrl = img.dataset.blobUrl;
-              img.src = url;
-              img.dataset.blobUrl = url;
-              img.style.display = "block";
-              const vid = document.getElementById("mobile-screen-video");
-              const rVid = document.getElementById("remoteVideo");
-              if (vid) vid.style.display = "none";
-              if (rVid) rVid.style.display = "none";
-              if (oldUrl) URL.revokeObjectURL(oldUrl);
-            }
-          } else if (packetType === 2 && uint8.length > 10) {
-            const isKeyFrame = uint8[1] === 1;
-            if (isKeyFrame) {
-              const gopEl = document.getElementById("m-gop-val");
-              if (gopEl) gopEl.style.color = "#38bdf8";
-              setTimeout(() => { if (gopEl) gopEl.style.color = "#34d399"; }, 300);
-            }
-          }
-        } else if (typeof event.data === "string") {
-          try {
-            const json = JSON.parse(event.data);
-            if (json.type === "pong") {
-              const ping = Date.now() - json.clientTime;
-              const pingEl = document.getElementById("webrtc-ping");
-              if (pingEl) pingEl.textContent = ping + " ms";
-              if (json.droppedFrames !== undefined) {
-                const qEl = document.getElementById("m-queue-val");
-                if (qEl) qEl.textContent = `Queue Flush Active (${json.droppedFrames} frames skipped for 0 lag)`;
-              }
-            } else if (json.type === "encoder_stats") {
-              if (json.gopIntervalSec) {
-                const el = document.getElementById("m-gop-val");
-                if (el) el.textContent = `${json.gopIntervalSec}s (Fast Keyframe • No Backlog)`;
-              }
-              if (json.profile) {
-                const el = document.getElementById("m-profile-val");
-                if (el) el.textContent = json.profile;
-              }
-              if (json.targetResolution) {
-                const el = document.getElementById("m-res-val");
-                if (el) el.textContent = `${json.targetResolution} (${json.targetBitrateKbps} kbps CBR)`;
-              }
-            }
-          } catch (_) {}
-        }
-      };
-    }
-
-    window.requestImmediateKeyframe = function() {
-      if (rtcDataChannel && rtcDataChannel.readyState === "open") {
-        rtcDataChannel.send(JSON.stringify({ type: "request_keyframe" }));
-      } else {
-        sendCloudCommand({ type: "request_keyframe" });
-      }
-      const el = document.getElementById("m-gop-val");
-      if (el) {
-        el.textContent = "⚡ Instant I-Frame Requested!";
-        el.style.color = "#38bdf8";
-        setTimeout(() => {
-          el.textContent = "1.0s (Fast Keyframe • No Backlog)";
-          el.style.color = "#34d399";
-        }, 1200);
-      }
-    };
-
-    window.updateOptimizerSettings = function(w, h, br, fps, gop) {
-      if (rtcDataChannel && rtcDataChannel.readyState === "open") {
-        rtcDataChannel.send(JSON.stringify({
-          type: "set_encoder_config",
-          width: w,
-          height: h,
-          bitrate: br,
-          fps: fps,
-          gop: gop
-        }));
-      }
-      const mode = w <= 540 ? "LOW_LATENCY" : (w <= 720 ? "BALANCED" : "HIGH_QUALITY");
-      updateModeUI(mode, true);
-      const resEl = document.getElementById("m-res-val");
-      if (resEl) {
-        resEl.textContent = `${h}p @ ${fps} FPS (${br} kbps CBR)`;
-      }
-    };
-
-    window.reconnectWebRtc = function() {
-      if (currentUsername) {
-        startWebRtcConnection(currentUsername);
-      }
-    };
-
-    // Charts instances
-    let batteryChartInstance = null;
-    let appUsageChartInstance = null;
-    let ramChartInstance = null;
-    let storageChartInstance = null;
-
-    function switchTab(tabId) {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
-      
-      const targetContent = document.getElementById(tabId);
-      if (targetContent) targetContent.style.display = "block";
-
-      const btnIndex = tabId === 'screen-tab' ? 0 : tabId === 'analytics-tab' ? 1 : tabId === 'telemetry-tab' ? 2 : 3;
-      document.querySelectorAll(".tab-btn")[btnIndex]?.classList.add("active");
-
-      if (tabId === 'analytics-tab' && latestTelemetryCache) {
-        renderCharts(latestTelemetryCache);
-      }
-    }
-    window.switchTab = switchTab;
-
-    function updateModeUI(mode, notifyPhone = true) {
-      activeMode = mode;
-      document.querySelectorAll(".btn-mode").forEach(b => b.classList.remove("active"));
-      const badge = document.getElementById("mode-badge");
-      const desc = document.getElementById("mode-desc");
-      if (mode === "LOW_LATENCY") {
-        document.getElementById("btn-mode-fast")?.classList.add("active");
-        if (badge) badge.textContent = "⚡ Ultra Fast (~120ms)";
-        if (desc) desc.textContent = "Ultra Fast (~120ms): সবচেয়ে কম ল্যাটেন্সি, রিয়েল-টাইম রেসপন্স ও মসৃণ কন্ট্রোল।";
-      } else if (mode === "BALANCED") {
-        document.getElementById("btn-mode-balanced")?.classList.add("active");
-        if (badge) badge.textContent = "⚖️ Medium (~350ms)";
-        if (desc) desc.textContent = "Medium (~350ms): ল্যাটেন্সি ও ভিডিও কোয়ালিটির চমৎকার সমন্বয়।";
-      } else {
-        document.getElementById("btn-mode-hd")?.classList.add("active");
-        if (badge) badge.textContent = "🌟 HD Quality (~900ms)";
-        if (desc) desc.textContent = "HD Quality (~900ms): স্পষ্ট লেখা ও হাই রেজোলিউশন (ল্যাটেন্সি কিছুটা বেশি)।";
-      }
-      if (notifyPhone && currentUsername) {
-        sendCloudCommand({ type: "set_mode", mode: mode });
-      }
-    }
-
+    // --- LOGIN / CONNECT ---
     async function connectWithCloud() {
-      const user = document.getElementById("username-input").value.trim().toLowerCase();
-      const pwd = document.getElementById("password-input").value.trim();
+      const user = document.getElementById("username-input").value.trim();
+      const pass = document.getElementById("password-input").value.trim();
       const errEl = document.getElementById("auth-err");
       errEl.style.display = "none";
 
-      if (!user || !pwd) {
-        errEl.textContent = "মোবাইল ইউজার আইডি এবং পাসওয়ার্ড দিন";
-        errEl.style.color = "#f87171";
+      if (!user) {
+        errEl.textContent = "Please enter Mobile User ID (Username).";
         errEl.style.display = "block";
         return;
       }
 
       try {
-        errEl.style.color = "#34d399";
-        errEl.style.display = "block";
-
-        let hostData = null;
-        for (let attempt = 1; attempt <= 3; attempt++) {
-          errEl.textContent = "Connecting to mobile via Supabase Cloud... (Attempt " + attempt + " of 3)";
-          try {
-            const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(user)}&select=*`);
-            if (rows && rows.length > 0) {
-              hostData = rows[0];
-              break;
-            }
-          } catch (e) {
-            console.warn("Fetch attempt " + attempt + " failed:", e);
-          }
-          if (attempt < 3) await new Promise(r => setTimeout(r, 1000));
-        }
-
-        if (!hostData) {
-          errEl.innerHTML = "<strong>মোবাইল আইডি '" + user + "' পাওয়া যায়নি।</strong><br><br>" +
-            "• আপনার মোবাইলে <strong>Remote Host</strong> অ্যাপটি ওপেন করুন।<br>" +
-            "• উপরের স্ট্যাটাস কার্ডে <strong>'Sync Now'</strong> বাটনে চাপ দিন যাতে ক্লাউডে কানেকশন সাথে সাথে রিফ্রেশ হয়।<br>" +
-            "• অ্যাপের উপরে প্রদর্শিত ইউজার আইডি (যেমন: " + user + ") মিলিয়ে নিন।<br>" +
-            "• Supabase সেটিংস চেক করতে উপরে <strong>'⚙️ Supabase Settings'</strong> এ ক্লিক করুন।";
-          errEl.style.color = "#f87171";
+        const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(user)}&select=id,password,status,battery_pct,is_charging,streaming_mode,last_heartbeat,latest_frame,frame_timestamp`);
+        if (!rows || rows.length === 0) {
+          errEl.textContent = `মোবাইল ডিভাইস (${user}) খুঁজে পাওয়া যায়নি। অ্যাপে গিয়ে Cloud Relay চালু আছে কিনা দেখুন।`;
           errEl.style.display = "block";
           return;
         }
 
-        if (hostData.password && hostData.password !== pwd) {
-          errEl.textContent = "ভুল পাসওয়ার্ড। মোবাইলের অ্যাপে দেওয়া পাসওয়ার্ড দিন (ডিফল্ট: HostAdmin@2026)";
-          errEl.style.color = "#f87171";
+        const host = rows[0];
+        if (host.password && pass && host.password !== pass) {
+          errEl.textContent = "ভুল পাসওয়ার্ড! আপনার ফোনের Host Password দিন (ডিফল্ট: HostAdmin@2026)।";
           errEl.style.display = "block";
           return;
         }
-
-        try {
-          localStorage.setItem("last_connected_user", user);
-          localStorage.setItem("last_connected_pwd", pwd);
-        } catch (_) {}
 
         currentUsername = user;
         document.getElementById("login-card").style.display = "none";
-        document.getElementById("app-tabs").style.display = "flex";
-        switchTab('screen-tab');
+        document.getElementById("screen-view").style.display = "block";
         document.getElementById("session-badge").style.display = "inline-flex";
+        document.getElementById("active-host-badge").style.display = "inline-flex";
+        document.getElementById("active-host-id").textContent = user;
+        document.getElementById("battery-badge").style.display = "inline-flex";
         document.getElementById("logout-btn").style.display = "inline-flex";
-        document.getElementById("hdr-phone-user").textContent = "Connected: " + user;
 
-        if (hostData.streaming_mode) {
-          updateModeUI(hostData.streaming_mode, false);
-        }
-
-        applyHostDataToUI(hostData);
+        applyHostDataToUI(host);
         listenToMobileScreen(user);
         startWebRtcConnection(user);
-        initCloudTouches();
       } catch (e) {
-        errEl.textContent = "Connection error: " + e.message;
-        errEl.style.color = "#f87171";
+        errEl.textContent = `কানেকশন এরর: ${e.message}`;
         errEl.style.display = "block";
       }
     }
+    window.connectWithCloud = connectWithCloud;
 
+    // --- LIVE SCREEN STREAMING & POLLING ---
     function applyHostDataToUI(data) {
       if (!data) return;
 
-      // Frame
+      // Frame rendering
       const frame = data.latest_frame || data.latestFrame;
       const fTimestamp = data.frame_timestamp || data.frameTimestamp || 0;
-      if (frame && fTimestamp !== lastRenderedFrameTime) {
+      if (frame && (fTimestamp > lastRenderedFrameTime || !lastRenderedFrameTime)) {
         lastRenderedFrameTime = fTimestamp;
         const img = document.getElementById("mobile-screen-img");
         if (img) {
@@ -1465,48 +744,44 @@ ON public.hosts FOR ALL TO anon USING (true) WITH CHECK (true);`;
           if (vid) vid.style.display = "none";
           if (rVid) rVid.style.display = "none";
         }
-      }
-
-      // Heartbeat & Status
-      const statusEl = document.getElementById("m-status");
-      const hbEl = document.getElementById("m-heartbeat");
-      const battEl = document.getElementById("m-battery");
-      const battVal = data.battery_pct !== undefined ? data.battery_pct : (data.batteryPct !== undefined ? data.batteryPct : "--");
-      const isCharging = data.is_charging !== undefined ? data.is_charging : !!data.isCharging;
-      if (battEl) battEl.textContent = battVal + "%" + (isCharging ? " ⚡" : "");
-
-      const hbTime = data.last_heartbeat || data.lastHeartbeat || 0;
-      if (hbTime) {
-        lastKnownHeartbeat = hbTime;
-        lastKnownScreenOn = data.is_screen_on !== false && data.isScreenOn !== false;
-        lastKnownStatus = data.status || "ONLINE";
-
-        const diff = Math.max(0, Math.floor((Date.now() - hbTime) / 1000));
-        if (diff <= 15) {
-          if (hbEl) { hbEl.textContent = "Just now (" + diff + "s ago)"; hbEl.style.color = "#34d399"; }
-          if (statusEl) {
-            if (!lastKnownScreenOn) {
-              statusEl.textContent = "STANDBY (Screen Off)";
-              statusEl.style.color = "#fbbf24";
-            } else {
-              statusEl.textContent = data.status || "ONLINE";
-              statusEl.style.color = "#34d399";
-            }
-          }
-        } else if (diff <= 45) {
-          if (hbEl) { hbEl.textContent = diff + "s ago"; hbEl.style.color = "#fbbf24"; }
-          if (statusEl) { statusEl.textContent = "IDLE / STANDBY"; statusEl.style.color = "#fbbf24"; }
-        } else {
-          if (hbEl) { hbEl.textContent = diff + "s ago"; hbEl.style.color = "#f87171"; }
-          if (statusEl) { statusEl.textContent = "OFFLINE / ASLEEP"; statusEl.style.color = "#f87171"; }
+        const frameTimeEl = document.getElementById("m-frame-time");
+        if (frameTimeEl) {
+          frameTimeEl.textContent = "Live (" + new Date(fTimestamp).toLocaleTimeString() + ")";
         }
       }
 
-      // Telemetry
-      if (data.telemetry) {
-        latestTelemetryCache = data.telemetry;
-        populateTelemetryUI(data.telemetry);
-        renderCharts(data.telemetry);
+      // Battery & Charging
+      const battVal = data.battery_pct !== undefined ? data.battery_pct : "--";
+      const isCharging = !!data.is_charging;
+      const battText = battVal + "%" + (isCharging ? " ⚡" : "");
+      const battEl = document.getElementById("m-battery");
+      if (battEl) battEl.textContent = battText;
+      const hBattEl = document.getElementById("header-battery");
+      if (hBattEl) hBattEl.textContent = battText;
+
+      // Heartbeat & Status
+      const hbTime = data.last_heartbeat || 0;
+      const hbEl = document.getElementById("m-heartbeat");
+      const statusPill = document.getElementById("m-status-pill");
+      const screenStateEl = document.getElementById("m-screen-state");
+
+      if (screenStateEl) {
+        screenStateEl.textContent = data.is_screen_on ? "Active (Screen On)" : "Standby (Screen Off)";
+        screenStateEl.style.color = data.is_screen_on ? "#34d399" : "#fbbf24";
+      }
+
+      if (hbTime) {
+        const diff = Math.max(0, Math.floor((Date.now() - hbTime) / 1000));
+        if (diff <= 15) {
+          if (hbEl) { hbEl.textContent = "Just now (" + diff + "s ago)"; hbEl.style.color = "#34d399"; }
+          if (statusPill) { statusPill.textContent = "ONLINE"; statusPill.style.color = "#34d399"; }
+        } else if (diff <= 45) {
+          if (hbEl) { hbEl.textContent = diff + "s ago"; hbEl.style.color = "#fbbf24"; }
+          if (statusPill) { statusPill.textContent = "IDLE"; statusPill.style.color = "#fbbf24"; }
+        } else {
+          if (hbEl) { hbEl.textContent = diff + "s ago"; hbEl.style.color = "#f87171"; }
+          if (statusPill) { statusPill.textContent = "OFFLINE"; statusPill.style.color = "#f87171"; }
+        }
       }
     }
 
@@ -1535,263 +810,33 @@ ON public.hosts FOR ALL TO anon USING (true) WITH CHECK (true);`;
         }
       }
 
-      // 2. Resilient High-Speed Polling (1.2s cadence)
+      // 2. High-Speed Frame & Heartbeat Polling (1.0s cadence)
       screenPollInterval = setInterval(async () => {
         if (!currentUsername) return;
         try {
-          const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}&select=id,status,is_screen_on,battery_pct,is_charging,streaming_mode,last_heartbeat,latest_frame,frame_timestamp,telemetry`);
+          const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}&select=id,status,is_screen_on,battery_pct,is_charging,streaming_mode,last_heartbeat,latest_frame,frame_timestamp`);
           if (rows && rows.length > 0) {
             applyHostDataToUI(rows[0]);
           }
         } catch (_) {}
-      }, 1200);
+      }, 1000);
     }
 
-    function safeSetText(id, val) {
-      const el = document.getElementById(id);
-      if (el && val !== undefined && val !== null) {
-        el.textContent = val;
-      }
-    }
-
-    function populateTelemetryUI(t) {
-      if (!t) return;
+    async function refreshScreenNow() {
+      if (!currentUsername) return;
       try {
-        if (t.chargingType) safeSetText("m-charging-type", t.chargingType);
-        if (t.activeNetworkType) safeSetText("m-network", t.activeNetworkType);
-        if (t.foregroundApp) safeSetText("m-fg-app", t.foregroundApp);
-
-        safeSetText("t-status", t.status || "ONLINE");
-        safeSetText("t-screen-state", t.isScreenOn ? "Screen On" : "Screen Off / Standby");
-        safeSetText("t-lock-state", t.isLocked ? "Device Locked" : "Unlocked");
-        safeSetText("t-uptime", t.uptimeFormatted || "--");
-        safeSetText("t-last-boot", t.lastBootTime || "--");
-        safeSetText("t-unlock-count", (t.unlockCount !== undefined ? t.unlockCount : 0) + " times");
-        safeSetText("t-screen-time", t.totalDailyScreenTime || "4h 52m");
-        safeSetText("t-idle-time", t.idleTime || "Active");
-
-        safeSetText("t-model", t.deviceModel || "--");
-        safeSetText("t-android", t.androidVersion || "--");
-        safeSetText("t-patch", t.securityPatch || "--");
-        safeSetText("t-cpu", (t.cpuCores || 8) + " Cores (" + (t.cpuArch || "arm64") + ")");
-        safeSetText("t-resolution", t.screenResolution || "--");
-        safeSetText("t-refresh-rate", t.refreshRate || "120 Hz");
-        safeSetText("t-density", t.densityDpi || "--");
-        safeSetText("t-brightness", t.displayBrightness || "68%");
-        safeSetText("t-dark-mode", t.isDarkMode ? "Dark Theme Active" : "Light Theme");
-        safeSetText("t-language", t.systemLanguage || "--");
-        safeSetText("t-timezone", t.timeZone || "--");
-
-        safeSetText("t-battery-pct", (t.batteryPct !== undefined ? t.batteryPct : "--") + "%");
-        safeSetText("t-charging", t.isCharging ? "Charging Active" : "Discharging");
-        safeSetText("t-plug-type", t.chargingType || "--");
-        safeSetText("t-temp", (t.batteryTempC || 31.2) + "°C");
-        safeSetText("t-health", t.batteryHealth || "Good");
-        safeSetText("t-voltage", (t.batteryVoltageMv || 4100) + " mV");
-        safeSetText("t-power-save", t.powerSaveMode ? "Enabled" : "Off");
-        safeSetText("t-drain-rate", t.batteryDrainRate || "--");
-        safeSetText("t-remaining", t.batteryEstimatedRemaining || "--");
-
-        safeSetText("t-net-type", t.activeNetworkType || "--");
-        safeSetText("t-net-gen", t.networkGeneration || "--");
-        safeSetText("t-wifi-ssid", t.wifiSsid || "--");
-        safeSetText("t-wifi-signal", (t.wifiSignalPct || "--") + "% (" + (t.wifiRssi || -55) + " dBm)");
-        safeSetText("t-link-speed", t.wifiLinkSpeed || "--");
-        safeSetText("t-sim-op", t.simOperator || "--");
-        safeSetText("t-sim-state", t.simState || "SIM Ready");
-        safeSetText("t-sim-count", (t.simCount || 2) + " SIMs Active");
-        safeSetText("t-ip", t.ipAddress || "--");
-        safeSetText("t-vpn", t.isVpnActive ? "VPN Connected" : "No VPN");
-        safeSetText("t-data-saver", t.dataSaverActive ? "Active" : "Off");
-        safeSetText("t-data-usage", t.dataUsageToday || "--");
-
-        safeSetText("t-play-protect", t.playProtectStatus || "Verified Safe");
-        safeSetText("t-biometrics", t.biometricsEnrolled ? "Enrolled & Ready" : "Not Set");
-        safeSetText("t-dev-options", t.developerOptions || "Disabled");
-        safeSetText("t-usb-debug", t.usbDebugging || "Disabled");
-        safeSetText("t-root", t.rootStatus || "Not Rooted");
-        safeSetText("t-integrity", t.deviceIntegrity || "Certified");
-
-        safeSetText("t-call-state", t.callState || "Idle");
-        safeSetText("t-airplane", t.airplaneMode ? "Active" : "Off");
-        safeSetText("t-volte", t.volteStatus || "Active");
-        safeSetText("t-notif-count", (t.notificationCount || 0) + " received");
-        safeSetText("t-last-notif", t.lastNotification || "None");
-
-        if (t.latitude && t.longitude) {
-          safeSetText("t-coords", t.latitude + "° N, " + t.longitude + "° E");
-          const mapsLink = document.getElementById("t-maps-link");
-          if (mapsLink) mapsLink.href = t.findMyDeviceUrl || ("https://maps.google.com/?q=" + t.latitude + "," + t.longitude);
-        }
-        safeSetText("t-loc-accuracy", t.locationAccuracy || "± 8m");
-        safeSetText("t-movement", t.movementDetection || "Stationary");
-
-        if (t.installedAppsSample && Array.isArray(t.installedAppsSample)) {
-          safeSetText("t-installed-count", t.installedAppsCount || t.installedAppsSample.length);
-          const container = document.getElementById("installed-apps-list");
-          if (container) {
-            container.innerHTML = "";
-            t.installedAppsSample.forEach(app => {
-              const div = document.createElement("div");
-              div.style.background = "#1e293b";
-              div.style.padding = "6px 10px";
-              div.style.borderRadius = "6px";
-              div.style.fontSize = "11px";
-              div.innerHTML = `<strong style="color:#e2e8f0; display:block;">${app.name}</strong><span style="color:#64748b; font-size:10px;">${app.package}</span>`;
-              container.appendChild(div);
-            });
+        await sendCloudCommand({ type: "take_screenshot" });
+        setTimeout(async () => {
+          const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(currentUsername)}&select=id,status,is_screen_on,battery_pct,is_charging,streaming_mode,last_heartbeat,latest_frame,frame_timestamp`);
+          if (rows && rows.length > 0) {
+            applyHostDataToUI(rows[0]);
           }
-        }
-
-        safeSetText("chart-battery-badge", (t.batteryPct || 84) + "%");
-        safeSetText("chart-screentime-badge", "Total: " + (t.totalDailyScreenTime || "4h 52m"));
-        safeSetText("stat-drain-rate", t.batteryDrainRate || "-3.2% / hr");
-        safeSetText("stat-temp", (t.batteryTempC || 31.2) + "°C");
-        safeSetText("stat-est-time", t.batteryEstimatedRemaining || "12h remaining");
-      } catch (err) {
-        console.warn("populateTelemetryUI notice:", err);
-      }
+        }, 180);
+      } catch (_) {}
     }
+    window.refreshScreenNow = refreshScreenNow;
 
-    function renderCharts(t) {
-      if (typeof Chart === 'undefined' || !t) return;
-
-      const batteryCanvas = document.getElementById("batteryChart");
-      if (batteryCanvas) {
-        let history = (t.batteryHistory && Array.isArray(t.batteryHistory) && t.batteryHistory.length > 0)
-          ? t.batteryHistory
-          : [
-              { timeLabel: "2h ago", pct: Math.min(100, (t.batteryPct || 85) + 6) },
-              { timeLabel: "1h ago", pct: Math.min(100, (t.batteryPct || 85) + 3) },
-              { timeLabel: "30m ago", pct: Math.min(100, (t.batteryPct || 85) + 1) },
-              { timeLabel: "Now", pct: (t.batteryPct || 85) }
-            ];
-        const labels = history.map(p => p.timeLabel || "Now");
-        const dataValues = history.map(p => p.pct !== undefined ? p.pct : (t.batteryPct || 85));
-        if (batteryChartInstance) batteryChartInstance.destroy();
-        batteryChartInstance = new Chart(batteryCanvas, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Battery Level (%)',
-              data: dataValues,
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.15)',
-              fill: true,
-              tension: 0.35,
-              pointBackgroundColor: '#34d399',
-              pointRadius: 4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-              x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
-            },
-            plugins: { legend: { display: false } }
-          }
-        });
-      }
-
-      const appCanvas = document.getElementById("appUsageChart");
-      if (appCanvas) {
-        let apps = (t.appUsageStats && Array.isArray(t.appUsageStats) && t.appUsageStats.length > 0)
-          ? t.appUsageStats
-          : [
-              { name: "Chrome", minutes: 78 },
-              { name: "WhatsApp", minutes: 64 },
-              { name: "YouTube", minutes: 52 },
-              { name: "Remote Host", minutes: 45 },
-              { name: "Settings", minutes: 18 }
-            ];
-        const appLabels = apps.map(a => a.name);
-        const appMins = apps.map(a => a.minutes);
-        if (appUsageChartInstance) appUsageChartInstance.destroy();
-        appUsageChartInstance = new Chart(appCanvas, {
-          type: 'bar',
-          data: {
-            labels: appLabels,
-            datasets: [{
-              label: 'Minutes Used',
-              data: appMins,
-              backgroundColor: ['#38bdf8', '#34d399', '#a78bfa', '#fbbf24', '#f43f5e', '#60a5fa', '#94a3b8'],
-              borderRadius: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: { beginAtZero: true, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-              x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-            },
-            plugins: { legend: { display: false } }
-          }
-        });
-      }
-
-      const ramCanvas = document.getElementById("ramChart");
-      if (ramCanvas) {
-        const used = t.ramUsedMb || 4200;
-        const free = t.ramFreeMb || 3800;
-        const usedEl = document.getElementById("gauge-ram-used");
-        if (usedEl) usedEl.textContent = (used / 1024).toFixed(1) + " GB (" + (t.ramUsagePct || 52) + "%)";
-        const freeEl = document.getElementById("gauge-ram-free");
-        if (freeEl) freeEl.textContent = (free / 1024).toFixed(1) + " GB";
-        if (ramChartInstance) ramChartInstance.destroy();
-        ramChartInstance = new Chart(ramCanvas, {
-          type: 'doughnut',
-          data: {
-            labels: ['Used RAM', 'Free RAM'],
-            datasets: [{
-              data: [used, free],
-              backgroundColor: ['#a78bfa', '#1e293b'],
-              borderColor: '#0f172a',
-              borderWidth: 2
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            plugins: { legend: { display: false } }
-          }
-        });
-      }
-
-      const storageCanvas = document.getElementById("storageChart");
-      if (storageCanvas) {
-        const sUsed = t.storageUsedGb || 68;
-        const sFree = t.storageFreeGb || 60;
-        const suEl = document.getElementById("gauge-storage-used");
-        if (suEl) suEl.textContent = sUsed + " GB (" + (t.storageUsagePct || 53) + "%)";
-        const sfEl = document.getElementById("gauge-storage-free");
-        if (sfEl) sfEl.textContent = sFree + " GB";
-        if (storageChartInstance) storageChartInstance.destroy();
-        storageChartInstance = new Chart(storageCanvas, {
-          type: 'doughnut',
-          data: {
-            labels: ['Used Storage', 'Free Storage'],
-            datasets: [{
-              data: [sUsed, sFree],
-              backgroundColor: ['#f59e0b', '#1e293b'],
-              borderColor: '#0f172a',
-              borderWidth: 2
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            plugins: { legend: { display: false } }
-          }
-        });
-      }
-    }
-
+    // --- COMMAND DISPATCHING & INPUT CONTROL ---
     async function sendCloudCommand(payload) {
       if (!currentUsername) return;
 
@@ -1817,21 +862,291 @@ ON public.hosts FOR ALL TO anon USING (true) WITH CHECK (true);`;
         console.error("Failed to send command to Supabase:", e);
       }
     }
+    window.sendCloudCommand = sendCloudCommand;
 
-    function exportTelemetryReport() {
-      if (!latestTelemetryCache) {
-        alert("Telemetry data is loading, please wait 2 seconds.");
-        return;
-      }
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(latestTelemetryCache, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `mobile_telemetry_report_${currentUsername}_${Date.now()}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+    function sendCloudNav(action) {
+      sendCloudCommand({ type: "nav", action: action });
+      setTimeout(refreshScreenNow, 200);
     }
-    window.exportTelemetryReport = exportTelemetryReport;
+    window.sendCloudNav = sendCloudNav;
+
+    function wakeDeviceScreen() {
+      sendCloudCommand({ type: "wake" });
+      setTimeout(refreshScreenNow, 300);
+    }
+    window.wakeDeviceScreen = wakeDeviceScreen;
+
+    function sendCloudText() {
+      const input = document.getElementById("type-text-input");
+      const text = input.value;
+      if (!text) return;
+      sendCloudCommand({ type: "text", text: text });
+      input.value = "";
+      setTimeout(refreshScreenNow, 250);
+    }
+    window.sendCloudText = sendCloudText;
+
+    function switchLatencyMode(mode) {
+      activeMode = mode;
+      document.querySelectorAll(".btn-mode").forEach(b => b.classList.remove("active"));
+      const badge = document.getElementById("mode-badge");
+      const desc = document.getElementById("mode-desc");
+      if (mode === "LOW_LATENCY") {
+        document.getElementById("btn-mode-fast")?.classList.add("active");
+        if (badge) badge.textContent = "⚡ Ultra Fast (~120ms)";
+        if (desc) desc.textContent = "Ultra Fast (~120ms): সবচেয়ে কম ল্যাটেন্সি, রিয়েল-টাইম রেসপন্স ও মসৃণ কন্ট্রোল।";
+      } else if (mode === "BALANCED") {
+        document.getElementById("btn-mode-balanced")?.classList.add("active");
+        if (badge) badge.textContent = "⚖️ Medium (~350ms)";
+        if (desc) desc.textContent = "Medium (~350ms): ল্যাটেন্সি ও কোয়ালিটির চমৎকার সমন্বয়।";
+      } else {
+        document.getElementById("btn-mode-hd")?.classList.add("active");
+        if (badge) badge.textContent = "🌟 HD Quality (~900ms)";
+        if (desc) desc.textContent = "HD Quality (~900ms): হাই রেজোলিউশন ও স্পষ্ট ফ্রেম।";
+      }
+      sendCloudCommand({ type: "set_mode", mode: mode });
+    }
+    window.switchLatencyMode = switchLatencyMode;
+
+    function requestImmediateKeyframe() {
+      sendCloudCommand({ type: "request_keyframe" });
+      refreshScreenNow();
+    }
+    window.requestImmediateKeyframe = requestImmediateKeyframe;
+
+    function toggleFullscreen() {
+      const vp = document.getElementById("viewport");
+      if (!document.fullscreenElement) {
+        vp.requestFullscreen?.().catch(_ => {});
+      } else {
+        document.exitFullscreen?.().catch(_ => {});
+      }
+    }
+    window.toggleFullscreen = toggleFullscreen;
+
+    // --- INTERACTIVE SCREEN TOUCH & GESTURES ---
+    const viewport = document.getElementById("viewport");
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let pointerStartTime = 0;
+    let isPointerDown = false;
+
+    viewport.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      sendCloudNav("BACK");
+    });
+
+    viewport.addEventListener("pointerdown", (e) => {
+      isPointerDown = true;
+      const rect = viewport.getBoundingClientRect();
+      pointerStartX = (e.clientX - rect.left) / rect.width;
+      pointerStartY = (e.clientY - rect.top) / rect.height;
+      pointerStartTime = Date.now();
+    });
+
+    viewport.addEventListener("pointerup", (e) => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      const rect = viewport.getBoundingClientRect();
+      const endX = (e.clientX - rect.left) / rect.width;
+      const endY = (e.clientY - rect.top) / rect.height;
+      const duration = Date.now() - pointerStartTime;
+      const dist = Math.hypot(endX - pointerStartX, endY - pointerStartY);
+
+      if (dist < 0.035) {
+        sendCloudCommand({ type: "tap", x: pointerStartX, y: pointerStartY });
+      } else {
+        sendCloudCommand({
+          type: "swipe",
+          startX: pointerStartX,
+          startY: pointerStartY,
+          endX: endX,
+          endY: endY,
+          durationMs: Math.min(600, Math.max(150, duration))
+        });
+      }
+      setTimeout(refreshScreenNow, 200);
+    });
+
+    viewport.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      const deltaY = e.deltaY > 0 ? 0.22 : -0.22;
+      sendCloudCommand({
+        type: "swipe",
+        startX: x,
+        startY: y,
+        endX: x,
+        endY: Math.max(0.05, Math.min(0.95, y - deltaY)),
+        durationMs: 200
+      });
+      setTimeout(refreshScreenNow, 200);
+    }, { passive: false });
+
+    // --- WEBRTC PEER-TO-PEER SETUP ---
+    async function startWebRtcConnection(username) {
+      if (rtcPeerConnection) {
+        try { rtcPeerConnection.close(); } catch (_) {}
+      }
+      processedHostCandidateSet.clear();
+      activeSessionId = "SES-" + Math.floor(1000 + Math.random() * 9000);
+
+      const rtcConfig = {
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" },
+          { urls: "stun:stun1.l.google.com:19302" },
+          { urls: "stun:stun2.l.google.com:19302" }
+        ],
+        sdpSemantics: "unified-plan"
+      };
+
+      try {
+        rtcPeerConnection = new RTCPeerConnection(rtcConfig);
+
+        rtcPeerConnection.onicecandidate = (event) => {
+          if (event.candidate && currentUsername) {
+            pushWebIceCandidate(currentUsername, activeSessionId, event.candidate);
+          }
+        };
+
+        rtcPeerConnection.ontrack = (event) => {
+          const remoteVideo = document.getElementById("remoteVideo");
+          if (remoteVideo && event.streams && event.streams[0]) {
+            remoteVideo.srcObject = event.streams[0];
+            remoteVideo.style.display = "block";
+            document.getElementById("mobile-screen-img").style.display = "none";
+          }
+        };
+
+        rtcDataChannel = rtcPeerConnection.createDataChannel("remoteControl", { ordered: false, maxRetransmits: 0 });
+        setupDataChannelEvents(rtcDataChannel);
+
+        const offer = await rtcPeerConnection.createOffer({
+          offerToReceiveVideo: true,
+          offerToReceiveAudio: false
+        });
+        await rtcPeerConnection.setLocalDescription(offer);
+
+        await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}`, "PATCH", {
+          webrtc_session: {
+            sessionId: activeSessionId,
+            offer: { type: "offer", sdp: offer.sdp },
+            status: "OFFERED",
+            offerTime: Date.now()
+          },
+          webrtc_ice_web: [],
+          webrtc_ice_host: []
+        });
+
+        startSignalingPoll(username, activeSessionId);
+      } catch (e) {
+        console.warn("WebRTC initialization notice:", e);
+      }
+    }
+
+    function setupDataChannelEvents(dc) {
+      dc.onopen = () => {
+        isWebRtcActive = true;
+        const b = document.getElementById("webrtc-badge");
+        if (b) {
+          b.textContent = "⚡ WebRTC P2P (~35ms)";
+          b.style.background = "rgba(16,185,129,0.25)";
+          b.style.color = "#34d399";
+        }
+        startWebRtcPing();
+      };
+      dc.onclose = () => {
+        isWebRtcActive = false;
+        const b = document.getElementById("webrtc-badge");
+        if (b) {
+          b.textContent = "Cloud Relay (PostgREST)";
+          b.style.background = "rgba(56,189,248,0.15)";
+          b.style.color = "#38bdf8";
+        }
+      };
+      dc.onmessage = (event) => {
+        try {
+          if (typeof event.data === "string") {
+            const msg = JSON.parse(event.data);
+            if (msg.type === "pong" && msg.clientTime) {
+              const ping = Date.now() - msg.clientTime;
+              const pingEl = document.getElementById("webrtc-ping");
+              if (pingEl) pingEl.textContent = ping + " ms";
+            }
+          }
+        } catch (_) {}
+      };
+    }
+
+    function startWebRtcPing() {
+      if (webrtcPingInterval) clearInterval(webrtcPingInterval);
+      webrtcPingInterval = setInterval(() => {
+        if (rtcDataChannel && rtcDataChannel.readyState === "open") {
+          try {
+            rtcDataChannel.send(JSON.stringify({ type: "ping", time: Date.now() }));
+          } catch (_) {}
+        }
+      }, 2000);
+    }
+
+    function startSignalingPoll(username, sessionId) {
+      if (signalingPollInterval) clearInterval(signalingPollInterval);
+      signalingPollInterval = setInterval(async () => {
+        if (!currentUsername || !rtcPeerConnection) return;
+        try {
+          const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}&select=webrtc_session,webrtc_ice_host`);
+          if (!rows || rows.length === 0) return;
+          const host = rows[0];
+
+          if (host.webrtc_session && host.webrtc_session.sessionId === sessionId && host.webrtc_session.answer) {
+            if (rtcPeerConnection.signalingState === "have-local-offer") {
+              const answerDesc = new RTCSessionDescription(host.webrtc_session.answer);
+              await rtcPeerConnection.setRemoteDescription(answerDesc);
+            }
+          }
+
+          if (host.webrtc_ice_host && Array.isArray(host.webrtc_ice_host)) {
+            for (const c of host.webrtc_ice_host) {
+              if (c.sdp && !processedHostCandidateSet.has(c.sdp)) {
+                processedHostCandidateSet.add(c.sdp);
+                try {
+                  await rtcPeerConnection.addIceCandidate(new RTCIceCandidate({
+                    candidate: c.sdp,
+                    sdpMid: c.sdpMid || "0",
+                    sdpMLineIndex: c.sdpMLineIndex !== undefined ? c.sdpMLineIndex : 0
+                  }));
+                } catch (_) {}
+              }
+            }
+          }
+        } catch (_) {}
+      }, 1200);
+    }
+
+    async function pushWebIceCandidate(username, sessionId, candidate) {
+      try {
+        const rows = await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}&select=webrtc_ice_web`);
+        let currentList = (rows && rows[0] && Array.isArray(rows[0].webrtc_ice_web)) ? rows[0].webrtc_ice_web : [];
+        currentList.push({
+          sessionId: sessionId,
+          sdp: candidate.candidate,
+          sdpMid: candidate.sdpMid,
+          sdpMLineIndex: candidate.sdpMLineIndex,
+          timestamp: Date.now()
+        });
+        await supabaseFetch(`hosts?id=eq.${encodeURIComponent(username)}`, "PATCH", {
+          webrtc_ice_web: currentList
+        });
+      } catch (_) {}
+    }
+
+    window.reconnectWebRtc = function() {
+      if (currentUsername) {
+        startWebRtcConnection(currentUsername);
+      }
+    };
 
     function logout() {
       if (screenPollInterval) clearInterval(screenPollInterval);
@@ -1848,178 +1163,20 @@ ON public.hosts FOR ALL TO anon USING (true) WITH CHECK (true);`;
       isWebRtcActive = false;
       currentUsername = "";
       document.getElementById("login-card").style.display = "block";
-      document.getElementById("app-tabs").style.display = "none";
-      document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
+      document.getElementById("screen-view").style.display = "none";
       document.getElementById("session-badge").style.display = "none";
+      document.getElementById("active-host-badge").style.display = "none";
+      document.getElementById("battery-badge").style.display = "none";
       document.getElementById("logout-btn").style.display = "none";
-      document.getElementById("hdr-phone-user").textContent = "No IP or Router configuration needed";
     }
-
-    window.connectWithCloud = connectWithCloud;
-    window.switchLatencyMode = function(mode) {
-      updateModeUI(mode, true);
-    };
-    window.sendCloudNav = function(action) {
-      sendCloudCommand({ type: "nav", action: action });
-    };
-    window.wakeDeviceScreen = function() {
-      sendCloudCommand({ type: "wake" });
-    };
-    window.sendCloudText = function() {
-      const input = document.getElementById("type-text-input");
-      const text = input.value.trim();
-      if (!text) return;
-      sendCloudCommand({ type: "text", text: text });
-      input.value = "";
-    };
-    window.sendCloudCommand = sendCloudCommand;
     window.logout = logout;
 
-    function initCloudTouches() {
-      const img = document.getElementById("mobile-screen-img");
-      let startX = 0;
-      let startY = 0;
-      let startTime = 0;
-      let isDragging = false;
-
-      function getNormalizedCoords(e) {
-        const rect = img.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-        const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
-        return { x, y };
-      }
-
-      img.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        const p = getNormalizedCoords(e);
-        startX = p.x;
-        startY = p.y;
-        startTime = Date.now();
-      });
-
-      img.addEventListener("mouseup", (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        const p = getNormalizedCoords(e);
-        const elapsed = Date.now() - startTime;
-        const dist = Math.hypot(p.x - startX, p.y - startY);
-
-        if (dist < 0.03) {
-          sendCloudCommand({ type: "tap", x: startX, y: startY });
-        } else {
-          sendCloudCommand({ type: "swipe", startX: startX, startY: startY, endX: p.x, endY: p.y, durationMs: Math.min(500, elapsed) });
-        }
-      });
-
-      img.addEventListener("touchstart", (e) => {
-        isDragging = true;
-        const p = getNormalizedCoords(e);
-        startX = p.x;
-        startY = p.y;
-        startTime = Date.now();
-      }, { passive: true });
-
-      img.addEventListener("touchend", (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        const elapsed = Date.now() - startTime;
-        const lastTouch = e.changedTouches ? e.changedTouches[0] : null;
-        if (!lastTouch) return;
-        const rect = img.getBoundingClientRect();
-        const endX = Math.max(0, Math.min(1, (lastTouch.clientX - rect.left) / rect.width));
-        const endY = Math.max(0, Math.min(1, (lastTouch.clientY - rect.top) / rect.height));
-        const dist = Math.hypot(endX - startX, endY - startY);
-
-        if (dist < 0.03) {
-          sendCloudCommand({ type: "tap", x: startX, y: startY });
-        } else {
-          sendCloudCommand({ type: "swipe", startX: startX, startY: startY, endX: endX, endY: endY, durationMs: Math.min(500, elapsed) });
-        }
-      }, { passive: true });
-    }
-
-    // Auto-discover active hosts from Supabase
-    async function loadDiscoveredHosts() {
-      try {
-        const rows = await supabaseFetch("hosts?select=id,status,battery_pct,is_charging,last_heartbeat,password&order=last_heartbeat.desc&limit=8");
-        const box = document.getElementById("auto-devices-box");
-        const list = document.getElementById("auto-devices-list");
-        if (!box || !list) return;
-
-        if (!rows || rows.length === 0) {
-          box.style.display = "none";
-          return;
-        }
-
-        list.innerHTML = "";
-        rows.forEach(d => {
-          const hostId = d.id;
-          const isOnline = (Date.now() - (d.last_heartbeat || 0)) < 60000;
-          const timeAgo = d.last_heartbeat ? Math.max(0, Math.floor((Date.now() - d.last_heartbeat) / 1000)) + "s ago" : "just now";
-
-          const item = document.createElement("div");
-          item.style.background = "#1e293b";
-          item.style.border = "1px solid #334155";
-          item.style.borderRadius = "8px";
-          item.style.padding = "10px 12px";
-          item.style.display = "flex";
-          item.style.justifyContent = "space-between";
-          item.style.alignItems = "center";
-          item.style.gap = "8px";
-
-          item.innerHTML = `
-            <div>
-              <div style="font-weight: 700; color: #f8fafc; font-size: 13px; display:flex; align-items:center; gap:6px;">
-                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${isOnline ? '#10b981' : '#f59e0b'};"></span>
-                ${hostId}
-              </div>
-              <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
-                ${isOnline ? '🟢 Online' : '🟡 Standby'} • ব্যাটারি: ${d.battery_pct !== undefined ? d.battery_pct + '%' : '--'}${d.is_charging ? ' ⚡' : ''} • সিঙ্ক: ${timeAgo}
-              </div>
-            </div>
-            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="window.selectAndConnectHost('${hostId}', '${d.password || 'HostAdmin@2026'}')">
-              কানেক্ট করুন ➔
-            </button>
-          `;
-          list.appendChild(item);
-        });
-
-        box.style.display = "block";
-      } catch (err) {
-        console.warn("Auto-discovery fetch notice:", err);
-      }
-    }
-
-    loadDiscoveredHosts();
-    setInterval(loadDiscoveredHosts, 4000);
-
-    window.selectAndConnectHost = function(user, pwd) {
-      const uEl = document.getElementById("username-input");
-      const pEl = document.getElementById("password-input");
-      if (uEl) uEl.value = user;
-      if (pEl && pwd) pEl.value = pwd;
-      connectWithCloud();
-    };
-
-    // Auto-check URL parameters or saved credentials
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlUser = urlParams.get("user") || urlParams.get("username") || localStorage.getItem("last_connected_user");
-      const urlPwd = urlParams.get("pwd") || urlParams.get("password") || localStorage.getItem("last_connected_pwd") || "HostAdmin@2026";
-      if (urlUser) {
-        const uInput = document.getElementById("username-input");
-        if (uInput) uInput.value = urlUser;
-      }
-      if (urlPwd) {
-        const pInput = document.getElementById("password-input");
-        if (pInput) pInput.value = urlPwd;
-      }
-      if (urlParams.get("auto") === "true") {
-        setTimeout(() => connectWithCloud(), 300);
-      }
-    } catch (_) {}
+    // Initialization on load
+    window.addEventListener("DOMContentLoaded", () => {
+      initSupabase();
+      discoverOnlineDevices();
+      setInterval(discoverOnlineDevices, 10000);
+    });
   </script>
 </body>
 </html>
